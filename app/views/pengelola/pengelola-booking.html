@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Masuk - Lifesports</title>
+    <link rel="stylesheet" href="../../../public/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header"><div class="sidebar-brand">Lifesports</div><div class="role-label">PENGELOLA</div></div>
+            <ul class="sidebar-menu">
+                <li><a href="pengelola.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="pengelola-lapangan.html"><i class="fas fa-building"></i> Lapangan Saya</a></li>
+                <li><a href="pengelola-booking.html" class="active"><i class="fas fa-calendar-check"></i> Booking Masuk</a></li>
+                <li><a href="pengelola-pembayaran.html"><i class="fas fa-credit-card"></i> Pembayaran</a></li>
+                <li><a href="pengelola-laporan.html"><i class="fas fa-file-invoice"></i> Laporan</a></li>
+                <li><a href="../auth/login.html" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <header class="dashboard-header"><div class="dash-title"><h1>Booking Masuk</h1><p>Konfirmasi reservasi dan pantau jadwal harian.</p></div></header>
+            <section class="table-container">
+                <div class="filter-bar compact"><input class="form-control" placeholder="Cari pelanggan atau kode"><select class="form-control"><option>Semua Status</option><option>Pending</option><option>Confirmed</option><option>Selesai</option></select><input class="form-control" type="date"><button class="btn-primary compact-button"><i class="fas fa-filter"></i> Filter</button></div>
+                <table class="data-table">
+                    <thead><tr><th>Kode</th><th>Pelanggan</th><th>Lapangan</th><th>Jadwal</th><th>Status</th><th>Aksi</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>BKG20260511001</strong></td><td>Deni Ramdani</td><td>GBK Arena</td><td>11 Mei 2026, 09:00</td><td><span class="status-badge status-warning">Pending</span></td><td><a href="pengelola-booking-detail.html" class="btn-action"><i class="fas fa-eye"></i></a></td></tr>
+                        <tr><td><strong>BKG20260510007</strong></td><td>Citra Lestari</td><td>Cilandak Sport</td><td>10 Mei 2026, 08:00</td><td><span class="status-badge status-info">Confirmed</span></td><td><a href="pengelola-booking-detail.html" class="btn-action"><i class="fas fa-eye"></i></a></td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
