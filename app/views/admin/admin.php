@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Lifesports</title>
+    <link rel="stylesheet" href="<?= BASEURL; ?>/public/assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">Lifesports</div>
+                <div class="role-label">SUPER ADMIN</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="<?= BASEURL; ?>/admin" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="<?= BASEURL; ?>/admin/users"><i class="fas fa-users"></i> Kelola User</a></li>
+                <li><a href="<?= BASEURL; ?>/admin/kategori"><i class="fas fa-tags"></i> Kategori</a></li>
+                <li><a href="<?= BASEURL; ?>/admin/lapangan"><i class="fas fa-building"></i> Semua Lapangan</a></li>
+                <li><a href="<?= BASEURL; ?>/admin/booking"><i class="fas fa-calendar-check"></i> Semua Booking</a></li>
+                <li><a href="<?= BASEURL; ?>/admin/pembayaran"><i class="fas fa-credit-card"></i> Semua Pembayaran</a></li>
+                <li><a href="<?= BASEURL; ?>/admin/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="dashboard-header">
+                <div class="dash-title">
+                    <h1>Dashboard Admin</h1>
+                    <p>Ringkasan keseluruhan sistem penyewaan lapangan</p>
+                </div>
+
+                <div class="dash-profile">
+                    <div class="profile-info">
+                        <div class="profile-name">Administrator</div>
+                        <div class="profile-role">Super Admin</div>
+                    </div>
+                    <div class="profile-img">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dash-stats">
+                <div class="dash-card">
+                    <div class="dash-card-icon"><i class="fas fa-users"></i></div>
+                    <div class="dash-card-info">
+                        <h3>Total User</h3>
+                        <div class="value">124</div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-icon"><i class="fas fa-building"></i></div>
+                    <div class="dash-card-info">
+                        <h3>Total Lapangan</h3>
+                        <div class="value">18</div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="dash-card-info">
+                        <h3>Total Booking</h3>
+                        <div class="value">450</div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="dash-card-info">
+                        <h3>Pendapatan (Bulan Ini)</h3>
+                        <div class="value value-compact">Rp 12.5M</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-grid two-col">
+
+                <div class="table-container" id="statistik-booking">
+                    <div class="table-header">
+                        <h2 class="table-title">Statistik Booking</h2>
+                    </div>
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td><span class="status-badge status-warning">Pending</span></td>
+                                <td>45 booking</td>
+                                <td class="text-right">Rp 4.500.000</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-info">Confirmed</span></td>
+                                <td>120 booking</td>
+                                <td class="text-right">Rp 18.000.000</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-success">Selesai</span></td>
+                                <td>280 booking</td>
+                                <td class="text-right">Rp 45.000.000</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-danger">Dibatalkan</span></td>
+                                <td>5 booking</td>
+                                <td class="text-right">Rp 500.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container" id="statistik-pembayaran">
+                    <div class="table-header">
+                        <h2 class="table-title">Statistik Pembayaran</h2>
+                    </div>
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td><span class="status-badge status-warning">Pending</span></td>
+                                <td>30 transaksi</td>
+                                <td class="text-right">Rp 3.000.000</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-success">Lunas</span></td>
+                                <td>410 transaksi</td>
+                                <td class="text-right">Rp 64.000.000</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-danger">Gagal</span></td>
+                                <td>10 transaksi</td>
+                                <td class="text-right">Rp 1.000.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-container" id="booking-terbaru">
+                <div class="table-header">
+                    <h2 class="table-title">Booking Terbaru</h2>
+                    <a href="<?= BASEURL; ?>/admin/booking" class="btn-primary compact-button">Lihat Semua</a>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Pelanggan</th>
+                            <th>Lapangan</th>
+                            <th>Tanggal</th>
+                            <th>Jam</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>BKG2026042812345</strong></td>
+                            <td>Andi Saputra</td>
+                            <td>Gelora Bung Karno (Futsal)</td>
+                            <td>28 Apr 2026</td>
+                            <td>19:00 - 21:00</td>
+                            <td>Rp 700.000</td>
+                            <td><span class="status-badge status-success">Selesai</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>BKG2026042898765</strong></td>
+                            <td>Budi Santoso</td>
+                            <td>Cilandak Sport (Tennis)</td>
+                            <td>29 Apr 2026</td>
+                            <td>08:00 - 10:00</td>
+                            <td>Rp 300.000</td>
+                            <td><span class="status-badge status-warning">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>BKG2026042854321</strong></td>
+                            <td>Citra Lestari</td>
+                            <td>Taufik Hidayat Arena</td>
+                            <td>29 Apr 2026</td>
+                            <td>15:00 - 17:00</td>
+                            <td>Rp 200.000</td>
+                            <td><span class="status-badge status-info">Confirmed</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>BKG2026042867890</strong></td>
+                            <td>Deni Ramdani</td>
+                            <td>Gelora Bung Karno (Futsal)</td>
+                            <td>30 Apr 2026</td>
+                            <td>20:00 - 22:00</td>
+                            <td>Rp 700.000</td>
+                            <td><span class="status-badge status-danger">Dibatalkan</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
