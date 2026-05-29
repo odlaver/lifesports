@@ -22,7 +22,7 @@
                 <li><a href="<?= BASEURL; ?>/admin/booking"><i class="fas fa-calendar-check"></i> Semua Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/pembayaran"><i class="fas fa-credit-card"></i> Semua Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/laporan" class="active"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -96,22 +96,22 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>Gelora Bung Karno</strong><br><small>Futsal</small></td>
+                                <td><strong>Inter Futsal Kedaton</strong><br><small>Futsal</small></td>
                                 <td>Bpk. Sudirman</td>
                                 <td>42x</td>
-                                <td>Rp 14.700.000</td>
+                                <td>Rp 12.600.000</td>
                             </tr>
                             <tr>
-                                <td><strong>Cilandak Sport</strong><br><small>Tennis</small></td>
+                                <td><strong>Kemiling Tennis Club</strong><br><small>Tennis</small></td>
                                 <td>Bpk. Sudirman</td>
                                 <td>38x</td>
-                                <td>Rp 5.700.000</td>
+                                <td>Rp 7.600.000</td>
                             </tr>
                             <tr>
-                                <td><strong>Taufik Hidayat Arena</strong><br><small>Badminton</small></td>
+                                <td><strong>Sukarame Badminton Hall</strong><br><small>Badminton</small></td>
                                 <td>Bpk. Sudirman</td>
                                 <td>31x</td>
-                                <td>Rp 3.100.000</td>
+                                <td>Rp 4.960.000</td>
                             </tr>
                         </tbody>
                     </table>

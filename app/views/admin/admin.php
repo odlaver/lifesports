@@ -25,7 +25,7 @@
                 <li><a href="<?= BASEURL; ?>/admin/booking"><i class="fas fa-calendar-check"></i> Semua Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/pembayaran"><i class="fas fa-credit-card"></i> Semua Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -39,7 +39,7 @@
 
                 <div class="dash-profile">
                     <div class="profile-info">
-                        <div class="profile-name">Administrator</div>
+                        <div class="profile-name"><?= htmlspecialchars($_SESSION['nama']); ?></div>
                         <div class="profile-role">Super Admin</div>
                     </div>
                     <div class="profile-img">
@@ -48,33 +48,34 @@
                 </div>
             </header>
 
+
             <div class="dash-stats">
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-users"></i></div>
                     <div class="dash-card-info">
                         <h3>Total User</h3>
-                        <div class="value">124</div>
+                        <div class="value"><?= $data['total_user']; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-building"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Lapangan</h3>
-                        <div class="value">18</div>
+                        <div class="value"><?= $data['total_lapangan']; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-calendar-check"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Booking</h3>
-                        <div class="value">450</div>
+                        <div class="value"><?= $data['total_booking']; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-wallet"></i></div>
                     <div class="dash-card-info">
-                        <h3>Pendapatan (Bulan Ini)</h3>
-                        <div class="value value-compact">Rp 12.5M</div>
+                        <h3>Pendapatan</h3>
+                        <div class="value value-compact">Rp <?= number_format($data['total_revenue'], 0, ',', '.'); ?></div>
                     </div>
                 </div>
             </div>
@@ -89,23 +90,23 @@
                         <tbody>
                             <tr>
                                 <td><span class="status-badge status-warning">Pending</span></td>
-                                <td>45 booking</td>
-                                <td class="text-right">Rp 4.500.000</td>
+                                <td><?= $data['booking_stats']['pending']['count']; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['pending']['total'], 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-info">Confirmed</span></td>
-                                <td>120 booking</td>
-                                <td class="text-right">Rp 18.000.000</td>
+                                <td><?= $data['booking_stats']['dikonfirmasi']['count']; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['dikonfirmasi']['total'], 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-success">Selesai</span></td>
-                                <td>280 booking</td>
-                                <td class="text-right">Rp 45.000.000</td>
+                                <td><?= $data['booking_stats']['selesai']['count']; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['selesai']['total'], 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-danger">Dibatalkan</span></td>
-                                <td>5 booking</td>
-                                <td class="text-right">Rp 500.000</td>
+                                <td><?= $data['booking_stats']['dibatalkan']['count']; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['dibatalkan']['total'], 0, ',', '.'); ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -119,18 +120,18 @@
                         <tbody>
                             <tr>
                                 <td><span class="status-badge status-warning">Pending</span></td>
-                                <td>30 transaksi</td>
-                                <td class="text-right">Rp 3.000.000</td>
+                                <td><?= $data['payment_stats']['menunggu']['count']; ?> transaksi</td>
+                                <td class="text-right">Rp <?= number_format($data['payment_stats']['menunggu']['total'], 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
-                                <td><span class="status-badge status-success">Lunas</span></td>
-                                <td>410 transaksi</td>
-                                <td class="text-right">Rp 64.000.000</td>
+                                <td><span class="status-badge status-success">Lunas / Valid</span></td>
+                                <td><?= $data['payment_stats']['valid']['count']; ?> transaksi</td>
+                                <td class="text-right">Rp <?= number_format($data['payment_stats']['valid']['total'], 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
-                                <td><span class="status-badge status-danger">Gagal</span></td>
-                                <td>10 transaksi</td>
-                                <td class="text-right">Rp 1.000.000</td>
+                                <td><span class="status-badge status-danger">Gagal / Tidak Valid</span></td>
+                                <td><?= $data['payment_stats']['tidak_valid']['count']; ?> transaksi</td>
+                                <td class="text-right">Rp <?= number_format($data['payment_stats']['tidak_valid']['total'], 0, ',', '.'); ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -156,42 +157,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>BKG2026042812345</strong></td>
-                            <td>Andi Saputra</td>
-                            <td>Gelora Bung Karno (Futsal)</td>
-                            <td>28 Apr 2026</td>
-                            <td>19:00 - 21:00</td>
-                            <td>Rp 700.000</td>
-                            <td><span class="status-badge status-success">Selesai</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BKG2026042898765</strong></td>
-                            <td>Budi Santoso</td>
-                            <td>Cilandak Sport (Tennis)</td>
-                            <td>29 Apr 2026</td>
-                            <td>08:00 - 10:00</td>
-                            <td>Rp 300.000</td>
-                            <td><span class="status-badge status-warning">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BKG2026042854321</strong></td>
-                            <td>Citra Lestari</td>
-                            <td>Taufik Hidayat Arena</td>
-                            <td>29 Apr 2026</td>
-                            <td>15:00 - 17:00</td>
-                            <td>Rp 200.000</td>
-                            <td><span class="status-badge status-info">Confirmed</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BKG2026042867890</strong></td>
-                            <td>Deni Ramdani</td>
-                            <td>Gelora Bung Karno (Futsal)</td>
-                            <td>30 Apr 2026</td>
-                            <td>20:00 - 22:00</td>
-                            <td>Rp 700.000</td>
-                            <td><span class="status-badge status-danger">Dibatalkan</span></td>
-                        </tr>
+                        <?php if (empty($data['booking_terbaru'])): ?>
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                    Belum ada booking terbaru.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($data['booking_terbaru'] as $row): 
+                                $status_class = 'status-pending';
+                                $status_label = 'Pending';
+                                if ($row['status'] === 'dibayar') {
+                                    $status_class = 'status-info';
+                                    $status_label = 'Dibayar';
+                                } elseif ($row['status'] === 'dikonfirmasi') {
+                                    $status_class = 'status-warning';
+                                    $status_label = 'Dikonfirmasi';
+                                } elseif ($row['status'] === 'selesai') {
+                                    $status_class = 'status-success';
+                                    $status_label = 'Selesai';
+                                } elseif ($row['status'] === 'dibatalkan') {
+                                    $status_class = 'status-danger';
+                                    $status_label = 'Dibatalkan';
+                                }
+                            ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($row['kode_booking']); ?></strong></td>
+                                    <td><?= htmlspecialchars($row['nama_pelanggan']); ?></td>
+                                    <td><?= htmlspecialchars($row['nama_lapangan']); ?> (<?= htmlspecialchars($row['nama_kategori']); ?>)</td>
+                                    <td><?= date('d M Y', strtotime($row['tanggal_main'])); ?></td>
+                                    <td><?= date('H:i', strtotime($row['jam_mulai'])); ?> - <?= date('H:i', strtotime($row['jam_selesai'])); ?></td>
+                                    <td>Rp <?= number_format($row['total_harga'], 0, ',', '.'); ?></td>
+                                    <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

@@ -22,7 +22,7 @@
                 <li><a href="<?= BASEURL; ?>/admin/booking"><i class="fas fa-calendar-check"></i> Semua Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/pembayaran"><i class="fas fa-credit-card"></i> Semua Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -78,51 +78,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><strong><i class="fas fa-futbol"></i> Futsal</strong></td>
-                                <td>7</td>
-                                <td>
-                                    <button class="btn-action" id="btn-edit-kategori-1" title="Edit"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-action danger" id="btn-hapus-kategori-1" title="Hapus"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><strong><i class="fas fa-volleyball-ball"></i> Badminton</strong></td>
-                                <td>5</td>
-                                <td>
-                                    <button class="btn-action" id="btn-edit-kategori-2" title="Edit"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-action danger" id="btn-hapus-kategori-2" title="Hapus"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td><strong><i class="fas fa-baseball-ball"></i> Tennis</strong></td>
-                                <td>3</td>
-                                <td>
-                                    <button class="btn-action" id="btn-edit-kategori-3" title="Edit"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-action danger" id="btn-hapus-kategori-3" title="Hapus"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td><strong><i class="fas fa-basketball-ball"></i> Basket</strong></td>
-                                <td>2</td>
-                                <td>
-                                    <button class="btn-action" id="btn-edit-kategori-4" title="Edit"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-action danger" id="btn-hapus-kategori-4" title="Hapus"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td><strong><i class="fas fa-swimming-pool"></i> Kolam Renang</strong></td>
-                                <td>1</td>
-                                <td>
-                                    <button class="btn-action" id="btn-edit-kategori-5" title="Edit"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-action danger" id="btn-hapus-kategori-5" title="Hapus"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
+                            <?php if (empty($data['kategori'])): ?>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                        Belum ada kategori terdaftar.
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <?php $i = 1; foreach ($data['kategori'] as $cat): ?>
+                                    <tr>
+                                        <td><?= $i++; ?></td>
+                                        <td><strong><i class="<?= htmlspecialchars($cat['icon']); ?>"></i> <?= htmlspecialchars($cat['nama_kategori']); ?></strong></td>
+                                        <td><?= $cat['total_lapangan']; ?></td>
+                                        <td>
+                                            <button class="btn-action" title="Edit" onclick="alert('Fitur edit kategori dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-pen"></i></button>
+                                            <button class="btn-action danger" title="Hapus" onclick="alert('Fitur hapus kategori dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </section>

@@ -1,5 +1,17 @@
+<?php
+$total_booking = count($data['booking']);
+$total_pending = 0;
+$total_confirmed = 0;
+$total_selesai = 0;
+foreach ($data['booking'] as $b) {
+    if ($b['status'] === 'pending' || $b['status'] === 'dibayar') $total_pending++;
+    elseif ($b['status'] === 'dikonfirmasi') $total_confirmed++;
+    elseif ($b['status'] === 'selesai') $total_selesai++;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +34,7 @@
                 <li><a href="<?= BASEURL; ?>/admin/booking" class="active"><i class="fas fa-calendar-check"></i> Semua Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/pembayaran"><i class="fas fa-credit-card"></i> Semua Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -39,28 +51,28 @@
                     <div class="dash-card-icon"><i class="fas fa-calendar-check"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Booking</h3>
-                        <div class="value">450</div>
+                        <div class="value"><?= $total_booking; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon warning"><i class="fas fa-clock"></i></div>
                     <div class="dash-card-info">
-                        <h3>Pending</h3>
-                        <div class="value value-warning">45</div>
+                        <h3>Pending / Paid</h3>
+                        <div class="value value-warning"><?= $total_pending; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-check-circle"></i></div>
                     <div class="dash-card-info">
-                        <h3>Selesai</h3>
-                        <div class="value">280</div>
+                        <h3>Dikonfirmasi</h3>
+                        <div class="value"><?= $total_confirmed; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
-                    <div class="dash-card-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="dash-card-icon"><i class="fas fa-flag-checkered"></i></div>
                     <div class="dash-card-info">
-                        <h3>Dibatalkan</h3>
-                        <div class="value">5</div>
+                        <h3>Selesai</h3>
+                        <div class="value"><?= $total_selesai; ?></div>
                     </div>
                 </div>
             </div>
@@ -96,50 +108,45 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>BKG2026042812345</strong></td>
-                            <td>Andi Saputra</td>
-                            <td>Gelora Bung Karno</td>
-                            <td>Bpk. Sudirman</td>
-                            <td>28 Apr 2026</td>
-                            <td>19:00-21:00</td>
-                            <td>Rp 700.000</td>
-                            <td><span class="status-badge status-success">Selesai</span></td>
-                            <td><a href="<?= BASEURL; ?>/admin/booking_detail" class="btn-action" title="Detail"><i class="fas fa-eye"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BKG2026042898765</strong></td>
-                            <td>Budi Santoso</td>
-                            <td>Cilandak Sport</td>
-                            <td>Bpk. Sudirman</td>
-                            <td>29 Apr 2026</td>
-                            <td>08:00-10:00</td>
-                            <td>Rp 300.000</td>
-                            <td><span class="status-badge status-warning">Pending</span></td>
-                            <td><a href="<?= BASEURL; ?>/admin/booking_detail" class="btn-action" title="Detail"><i class="fas fa-eye"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BKG2026042854321</strong></td>
-                            <td>Citra Lestari</td>
-                            <td>Taufik Hidayat Arena</td>
-                            <td>Bpk. Sudirman</td>
-                            <td>29 Apr 2026</td>
-                            <td>15:00-17:00</td>
-                            <td>Rp 200.000</td>
-                            <td><span class="status-badge status-info">Confirmed</span></td>
-                            <td><a href="<?= BASEURL; ?>/admin/booking_detail" class="btn-action" title="Detail"><i class="fas fa-eye"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td><strong>BKG2026042867890</strong></td>
-                            <td>Deni Ramdani</td>
-                            <td>Gelora Bung Karno</td>
-                            <td>Bpk. Sudirman</td>
-                            <td>30 Apr 2026</td>
-                            <td>20:00-22:00</td>
-                            <td>Rp 700.000</td>
-                            <td><span class="status-badge status-danger">Dibatalkan</span></td>
-                            <td><a href="<?= BASEURL; ?>/admin/booking_detail" class="btn-action" title="Detail"><i class="fas fa-eye"></i></a></td>
-                        </tr>
+                        <?php if (empty($data['booking'])): ?>
+                            <tr>
+                                <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                    Belum ada data booking.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($data['booking'] as $row): 
+                                $status_class = 'status-pending';
+                                $status_label = 'Pending';
+                                if ($row['status'] === 'dibayar') {
+                                    $status_class = 'status-info';
+                                    $status_label = 'Dibayar';
+                                } elseif ($row['status'] === 'dikonfirmasi') {
+                                    $status_class = 'status-warning';
+                                    $status_label = 'Dikonfirmasi';
+                                } elseif ($row['status'] === 'selesai') {
+                                    $status_class = 'status-success';
+                                    $status_label = 'Selesai';
+                                } elseif ($row['status'] === 'dibatalkan') {
+                                    $status_class = 'status-danger';
+                                    $status_label = 'Dibatalkan';
+                                }
+                            ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($row['kode_booking']); ?></strong></td>
+                                    <td><?= htmlspecialchars($row['nama_pelanggan']); ?></td>
+                                    <td><?= htmlspecialchars($row['nama_lapangan']); ?> (<?= htmlspecialchars($row['nama_kategori']); ?>)</td>
+                                    <td><?= htmlspecialchars($row['nama_pengelola']); ?></td>
+                                    <td><?= date('d M Y', strtotime($row['tanggal_main'])); ?></td>
+                                    <td><?= date('H:i', strtotime($row['jam_mulai'])); ?> - <?= date('H:i', strtotime($row['jam_selesai'])); ?></td>
+                                    <td>Rp <?= number_format($row['total_harga'], 0, ',', '.'); ?></td>
+                                    <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
+                                    <td>
+                                        <button class="btn-action" title="Detail" onclick="alert('Kode Booking: <?= htmlspecialchars($row['kode_booking']); ?>\nPelanggan: <?= htmlspecialchars($row['nama_pelanggan']); ?>\nLapangan: <?= htmlspecialchars($row['nama_lapangan']); ?>\nPengelola: <?= htmlspecialchars($row['nama_pengelola']); ?>\nStatus: <?= ucfirst($row['status']); ?>')"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>

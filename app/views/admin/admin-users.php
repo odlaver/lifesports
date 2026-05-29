@@ -1,5 +1,17 @@
+<?php
+$total_users = count($data['users']);
+$total_pelanggan = 0;
+$total_pengelola = 0;
+$total_admin = 0;
+foreach ($data['users'] as $u) {
+    if ($u['role'] === 'pelanggan') $total_pelanggan++;
+    elseif ($u['role'] === 'pengelola') $total_pengelola++;
+    elseif ($u['role'] === 'admin') $total_admin++;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +34,7 @@
                 <li><a href="<?= BASEURL; ?>/admin/booking"><i class="fas fa-calendar-check"></i> Semua Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/pembayaran"><i class="fas fa-credit-card"></i> Semua Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/admin/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -42,32 +54,32 @@
                     <div class="dash-card-icon"><i class="fas fa-users"></i></div>
                     <div class="dash-card-info">
                         <h3>Total User</h3>
-                        <div class="value">124</div>
-                        <small>Semua role</small>
+                        <div class="value"><?= $total_users; ?></div>
+                        <small>Semua role terdaftar</small>
                     </div>
                 </div>
                 <div class="dash-card">
-                    <div class="dash-card-icon"><i class="fas fa-user-check"></i></div>
+                    <div class="dash-card-icon"><i class="fas fa-user-friends"></i></div>
                     <div class="dash-card-info">
-                        <h3>Aktif</h3>
-                        <div class="value">118</div>
-                        <small>User aktif</small>
+                        <h3>Pelanggan</h3>
+                        <div class="value"><?= $total_pelanggan; ?></div>
+                        <small>Pengguna aktif</small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon warning"><i class="fas fa-user-tie"></i></div>
                     <div class="dash-card-info">
                         <h3>Pengelola</h3>
-                        <div class="value value-warning">12</div>
-                        <small>Mitra pengelola</small>
+                        <div class="value value-warning"><?= $total_pengelola; ?></div>
+                        <small>Mitra penyedia lapangan</small>
                     </div>
                 </div>
                 <div class="dash-card">
-                    <div class="dash-card-icon"><i class="fas fa-user-slash"></i></div>
+                    <div class="dash-card-icon"><i class="fas fa-user-shield"></i></div>
                     <div class="dash-card-info">
-                        <h3>Nonaktif</h3>
-                        <div class="value">6</div>
-                        <small>Akun dinonaktifkan</small>
+                        <h3>Admin</h3>
+                        <div class="value"><?= $total_admin; ?></div>
+                        <small>Administrator sistem</small>
                     </div>
                 </div>
             </div>
@@ -104,71 +116,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td><strong>Andi Saputra</strong></td>
-                            <td>andi@email.com</td>
-                            <td><span class="sport-chip info">Pelanggan</span></td>
-                            <td>10 Jan 2026</td>
-                            <td><span class="status-badge status-success">Aktif</span></td>
-                            <td>
-                                <a href="<?= BASEURL; ?>/admin/user_form" class="btn-action" title="Edit"><i class="fas fa-pen"></i></a>
-                                <button class="btn-action warning" title="Nonaktifkan"><i class="fas fa-ban"></i></button>
-                                <button class="btn-action danger" title="Hapus"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><strong>Budi Santoso</strong></td>
-                            <td>budi@email.com</td>
-                            <td><span class="sport-chip info">Pelanggan</span></td>
-                            <td>12 Jan 2026</td>
-                            <td><span class="status-badge status-success">Aktif</span></td>
-                            <td>
-                                <a href="<?= BASEURL; ?>/admin/user_form" class="btn-action" title="Edit"><i class="fas fa-pen"></i></a>
-                                <button class="btn-action warning" title="Nonaktifkan"><i class="fas fa-ban"></i></button>
-                                <button class="btn-action danger" title="Hapus"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><strong>Bpk. Sudirman</strong></td>
-                            <td>sudirman@email.com</td>
-                            <td><span class="sport-chip success">Pengelola</span></td>
-                            <td>5 Feb 2026</td>
-                            <td><span class="status-badge status-success">Aktif</span></td>
-                            <td>
-                                <a href="<?= BASEURL; ?>/admin/user_form" class="btn-action" title="Edit"><i class="fas fa-pen"></i></a>
-                                <button class="btn-action warning" title="Nonaktifkan"><i class="fas fa-ban"></i></button>
-                                <button class="btn-action danger" title="Hapus"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td><strong>Citra Lestari</strong></td>
-                            <td>citra@email.com</td>
-                            <td><span class="sport-chip info">Pelanggan</span></td>
-                            <td>20 Feb 2026</td>
-                            <td><span class="status-badge status-success">Aktif</span></td>
-                            <td>
-                                <a href="<?= BASEURL; ?>/admin/user_form" class="btn-action" title="Edit"><i class="fas fa-pen"></i></a>
-                                <button class="btn-action warning" title="Nonaktifkan"><i class="fas fa-ban"></i></button>
-                                <button class="btn-action danger" title="Hapus"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td><strong>Deni Ramdani</strong></td>
-                            <td>deni@email.com</td>
-                            <td><span class="sport-chip info">Pelanggan</span></td>
-                            <td>1 Mar 2026</td>
-                            <td><span class="status-badge status-danger">Nonaktif</span></td>
-                            <td>
-                                <a href="<?= BASEURL; ?>/admin/user_form" class="btn-action" title="Edit"><i class="fas fa-pen"></i></a>
-                                <button class="btn-action" title="Aktifkan"><i class="fas fa-check-circle"></i></button>
-                                <button class="btn-action danger" title="Hapus"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
+                        <?php if (empty($data['users'])): ?>
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                    Belum ada user terdaftar.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php $i = 1; foreach ($data['users'] as $user): 
+                                $role_class = 'info';
+                                if ($user['role'] === 'pengelola') {
+                                    $role_class = 'success';
+                                } elseif ($user['role'] === 'admin') {
+                                    $role_class = 'warning';
+                                }
+                            ?>
+                                <tr>
+                                    <td><?= $i++; ?></td>
+                                    <td><strong><?= htmlspecialchars($user['nama']); ?></strong></td>
+                                    <td><?= htmlspecialchars($user['email']); ?></td>
+                                    <td><span class="sport-chip <?= $role_class; ?>"><?= ucfirst(htmlspecialchars($user['role'])); ?></span></td>
+                                    <td><?= date('d M Y', strtotime($user['created_at'])); ?></td>
+                                    <td><span class="status-badge status-success">Aktif</span></td>
+                                    <td>
+                                        <button class="btn-action warning" title="Edit" onclick="alert('Fitur edit user dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-pen"></i></button>
+                                        <button class="btn-action danger" title="Hapus" onclick="alert('Fitur hapus user dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>
