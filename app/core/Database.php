@@ -11,7 +11,6 @@ class Database {
 
     public function __construct()
     {
-        // Data Source Name
         $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->db_name;
 
         $option = [

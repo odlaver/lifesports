@@ -1,5 +1,3 @@
--- phpMyAdmin SQL Dump
--- Database: `lifesports`
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -10,11 +8,7 @@ SET time_zone = "+07:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- --------------------------------------------------------
 
---
--- Struktur dari tabel `users`
---
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -29,21 +23,13 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `users`
---
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `no_telp`, `role`, `foto`) VALUES
 (1, 'Super Admin', 'admin@lifesports.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '081234567890', 'admin', 'default.jpg'),
 (2, 'Pengelola Taufik Arena', 'pengelola@lifesports.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '081234567891', 'pengelola', 'default.jpg'),
 (3, 'Budi Pelanggan', 'budi@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '081234567892', 'pelanggan', 'default.jpg');
--- Password default untuk ketiganya adalah: password
 
--- --------------------------------------------------------
 
---
--- Struktur dari tabel `kategori_lapangan`
---
 
 CREATE TABLE `kategori_lapangan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -52,9 +38,6 @@ CREATE TABLE `kategori_lapangan` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `kategori_lapangan`
---
 
 INSERT INTO `kategori_lapangan` (`id`, `nama_kategori`, `icon`) VALUES
 (1, 'Futsal', 'fas fa-futbol'),
@@ -62,11 +45,7 @@ INSERT INTO `kategori_lapangan` (`id`, `nama_kategori`, `icon`) VALUES
 (3, 'Basket', 'fas fa-basketball-ball'),
 (4, 'Tenis', 'fas fa-baseball-ball');
 
--- --------------------------------------------------------
 
---
--- Struktur dari tabel `lapangan`
---
 
 CREATE TABLE `lapangan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -84,11 +63,7 @@ CREATE TABLE `lapangan` (
   FOREIGN KEY (`id_kategori`) REFERENCES `kategori_lapangan`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
 
---
--- Struktur dari tabel `booking`
---
 
 CREATE TABLE `booking` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -107,11 +82,7 @@ CREATE TABLE `booking` (
   FOREIGN KEY (`id_lapangan`) REFERENCES `lapangan`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
 
---
--- Struktur dari tabel `pembayaran`
---
 
 CREATE TABLE `pembayaran` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -124,11 +95,7 @@ CREATE TABLE `pembayaran` (
   FOREIGN KEY (`id_booking`) REFERENCES `booking`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
 
---
--- Struktur dari tabel `review`
---
 
 CREATE TABLE `review` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
