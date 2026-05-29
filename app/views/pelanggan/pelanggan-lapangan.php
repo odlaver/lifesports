@@ -20,7 +20,7 @@
                 <li><a href="<?= BASEURL; ?>/pelanggan/booking"><i class="fas fa-calendar-check"></i> Riwayat Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/pelanggan/profile"><i class="fas fa-user"></i> Profile Saya</a></li>
                 <li><a href="<?= BASEURL; ?>/pelanggan/lapangan" class="active"><i class="fas fa-search"></i> Cari Lapangan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -33,7 +33,7 @@
                 </div>
                 <div class="dash-profile">
                     <div class="profile-info">
-                        <div class="profile-name">Deni Ramdani</div>
+                        <div class="profile-name"><?= htmlspecialchars($_SESSION['nama']); ?></div>
                         <div class="profile-role">Pelanggan</div>
                     </div>
                     <div class="profile-img">
@@ -41,6 +41,7 @@
                     </div>
                 </div>
             </header>
+
 
             <section class="table-container catalog-dashboard">
 
@@ -55,10 +56,11 @@
                     </select>
                     <select class="form-control" id="filter-lokasi">
                         <option>Semua Lokasi</option>
-                        <option>Jakarta Pusat</option>
-                        <option>Jakarta Selatan</option>
-                        <option>Jakarta Timur</option>
-                        <option>Bandar Lampung</option>
+                        <option>Kedaton</option>
+                        <option>Sukarame</option>
+                        <option>Way Halim</option>
+                        <option>Kemiling</option>
+                        <option>Tanjung Karang</option>
                     </select>
                     <input class="form-control" id="filter-tanggal" type="date">
                     <select class="form-control" id="filter-sort">
@@ -79,113 +81,55 @@
                 </div>
 
                 <div class="catalog-grid">
-
-                    <article class="venue-card" id="venue-gbk">
-                        <img src="<?= BASEURL; ?>/public/assets/img/bola.png" alt="Lapangan futsal GBK" class="venue-img">
-                        <div class="venue-body">
-                            <div class="venue-topline">
-                                <span>Futsal</span>
-                                <strong><i class="fas fa-star"></i> 4.9</strong>
-                            </div>
-                            <h2>Gelora Bung Karno Arena</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Senayan, Jakarta Pusat</p>
-                            <div class="venue-meta">
-                                <span>Indoor</span>
-                                <span>08:00 - 22:00</span>
-                                <span>12 slot</span>
-                            </div>
-                            <div class="venue-footer">
-                                <div class="venue-price">Rp 350.000<span>/jam</span></div>
-                                <a href="<?= BASEURL; ?>/pelanggan/pelanggan_detail_lapangan" class="btn-secondary" id="btn-detail-gbk">Detail</a>
-                            </div>
+                    <?php if (empty($data['lapangan'])): ?>
+                        <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--text-muted);">
+                            <i class="fas fa-search-minus" style="font-size: 3rem; margin-bottom: 12px; display: block; color: var(--text-gold);"></i>
+                            Tidak ada lapangan yang tersedia saat ini.
                         </div>
-                    </article>
-
-                    <article class="venue-card" id="venue-cilandak">
-                        <img src="<?= BASEURL; ?>/public/assets/img/tenis.jpg" alt="Lapangan tennis Cilandak" class="venue-img">
-                        <div class="venue-body">
-                            <div class="venue-topline">
-                                <span>Tennis</span>
-                                <strong><i class="fas fa-star"></i> 4.8</strong>
-                            </div>
-                            <h2>Cilandak Sport Center</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Cilandak, Jakarta Selatan</p>
-                            <div class="venue-meta">
-                                <span>Outdoor</span>
-                                <span>06:00 - 21:00</span>
-                                <span>9 slot</span>
-                            </div>
-                            <div class="venue-footer">
-                                <div class="venue-price">Rp 150.000<span>/jam</span></div>
-                                <a href="<?= BASEURL; ?>/pelanggan/pelanggan_detail_lapangan" class="btn-secondary" id="btn-detail-cilandak">Detail</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="venue-card" id="venue-taufik">
-                        <img src="<?= BASEURL; ?>/public/assets/img/badminton.jpg" alt="Lapangan badminton Taufik" class="venue-img">
-                        <div class="venue-body">
-                            <div class="venue-topline">
-                                <span>Badminton</span>
-                                <strong><i class="fas fa-star"></i> 4.9</strong>
-                            </div>
-                            <h2>Taufik Hidayat Arena</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Ciracas, Jakarta Timur</p>
-                            <div class="venue-meta">
-                                <span>Indoor</span>
-                                <span>07:00 - 23:00</span>
-                                <span>15 slot</span>
-                            </div>
-                            <div class="venue-footer">
-                                <div class="venue-price">Rp 100.000<span>/jam</span></div>
-                                <a href="<?= BASEURL; ?>/pelanggan/pelanggan_detail_lapangan" class="btn-secondary" id="btn-detail-taufik">Detail</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="venue-card" id="venue-southcourt">
-                        <img src="<?= BASEURL; ?>/public/assets/img/basket.jpg" alt="Lapangan basket South Court" class="venue-img">
-                        <div class="venue-body">
-                            <div class="venue-topline">
-                                <span>Basket</span>
-                                <strong><i class="fas fa-star"></i> 4.7</strong>
-                            </div>
-                            <h2>South Court Basketball</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta Selatan</p>
-                            <div class="venue-meta">
-                                <span>Outdoor</span>
-                                <span>08:00 - 20:00</span>
-                                <span>7 slot</span>
-                            </div>
-                            <div class="venue-footer">
-                                <div class="venue-price">Rp 180.000<span>/jam</span></div>
-                                <a href="<?= BASEURL; ?>/pelanggan/pelanggan_detail_lapangan" class="btn-secondary" id="btn-detail-southcourt">Detail</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="venue-card" id="venue-gor-sumantri">
-                        <img src="<?= BASEURL; ?>/public/assets/img/basket indoor.jpg" alt="GOR Soemantri" class="venue-img">
-                        <div class="venue-body">
-                            <div class="venue-topline">
-                                <span>Basket</span>
-                                <strong><i class="fas fa-star"></i> 4.7</strong>
-                            </div>
-                            <h2>GOR Soemantri Brodjonegoro</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Kuningan, Jakarta Selatan</p>
-                            <div class="venue-meta">
-                                <span>Indoor</span>
-                                <span>08:00 - 22:00</span>
-                                <span>6 slot</span>
-                            </div>
-                            <div class="venue-footer">
-                                <div class="venue-price">Rp 250.000<span>/jam</span></div>
-                                <a href="<?= BASEURL; ?>/pelanggan/pelanggan_detail_lapangan" class="btn-secondary" id="btn-detail-gor">Detail</a>
-                            </div>
-                        </div>
-                    </article>
-
+                    <?php else: ?>
+                        <?php foreach($data['lapangan'] as $lapangan): 
+                            $foto = !empty($lapangan['foto_utama']) ? $lapangan['foto_utama'] : 'default_lapangan.jpg';
+                            
+                            $chip_class = 'info';
+                            $img_fallback = 'bola.png';
+                            if (strtolower($lapangan['nama_kategori']) === 'tennis' || strtolower($lapangan['nama_kategori']) === 'tenis') {
+                                $chip_class = 'success';
+                                $img_fallback = 'tenis.jpg';
+                            } elseif (strtolower($lapangan['nama_kategori']) === 'badminton') {
+                                $chip_class = 'warning';
+                                $img_fallback = 'badminton.jpg';
+                            } elseif (strtolower($lapangan['nama_kategori']) === 'basket') {
+                                $chip_class = 'danger';
+                                $img_fallback = 'basket.jpg';
+                            }
+                            
+                            $facilities = !empty($lapangan['fasilitas']) ? explode(',', $lapangan['fasilitas']) : ['Standard'];
+                        ?>
+                            <article class="venue-card">
+                                <img src="<?= BASEURL; ?>/public/assets/uploads/lapangan/<?= $foto; ?>" 
+                                     onerror="this.onerror=null; this.src='<?= BASEURL; ?>/public/assets/img/<?= $img_fallback; ?>';" alt="<?= htmlspecialchars($lapangan['nama_lapangan']); ?>" class="venue-img">
+                                <div class="venue-body">
+                                    <div class="venue-topline">
+                                        <span class="sport-chip <?= $chip_class; ?>" style="font-size: 0.7rem; padding: 2px 8px; margin: 0;"><?= htmlspecialchars($lapangan['nama_kategori']); ?></span>
+                                        <strong><i class="fas fa-star" style="color: var(--text-gold);"></i> <?= number_format($lapangan['rating'], 1); ?></strong>
+                                    </div>
+                                    <h2><?= htmlspecialchars($lapangan['nama_lapangan']); ?></h2>
+                                    <p><i class="fas fa-map-marker-alt"></i> Bandar Lampung</p>
+                                    <div class="venue-meta">
+                                        <?php foreach($facilities as $facility): ?>
+                                            <span><?= htmlspecialchars(trim($facility)); ?></span>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="venue-footer">
+                                        <div class="venue-price">Rp <?= number_format($lapangan['harga_per_jam'], 0, ',', '.'); ?><span>/jam</span></div>
+                                        <a href="<?= BASEURL; ?>/pelanggan/pelanggan_detail_lapangan/<?= $lapangan['id']; ?>" class="btn-secondary">Detail</a>
+                                    </div>
+                                </div>
+                            </article>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
+
 
             </section>
         </main>

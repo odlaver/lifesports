@@ -19,7 +19,7 @@
                 <li><a href="<?= BASEURL; ?>/pelanggan/booking"><i class="fas fa-calendar-check"></i> Riwayat Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/pelanggan/profile" class="active"><i class="fas fa-user"></i> Profile Saya</a></li>
                 <li><a href="<?= BASEURL; ?>/pelanggan/lapangan"><i class="fas fa-search"></i> Cari Lapangan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -32,32 +32,35 @@
             </header>
 
             <section class="form-panel">
-                <form action="<?= BASEURL; ?>/pelanggan">
+                <?php Flasher::flash(); ?>
+                
+                <form action="<?= BASEURL; ?>/pelanggan/update_profile" method="POST">
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label" for="name">Nama Lengkap</label>
-                            <input id="name" class="form-control" value="Deni Ramdani">
+                            <input id="name" name="nama" class="form-control" value="<?= htmlspecialchars($data['user']['nama']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="email-profile">Email</label>
-                            <input id="email-profile" class="form-control" value="deni@example.com">
+                            <input id="email-profile" name="email" class="form-control" value="<?= htmlspecialchars($data['user']['email']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="phone">No. Telepon</label>
-                            <input id="phone" class="form-control" value="0812-3344-5566">
+                            <input id="phone" name="no_telp" class="form-control" value="<?= htmlspecialchars($data['user']['no_telp'] ?? ''); ?>">
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="city">Kota</label>
-                            <input id="city" class="form-control" value="Bandar Lampung">
+                            <input id="city" class="form-control" value="Bandar Lampung" readonly disabled>
                         </div>
                         <div class="form-group full">
                             <label class="form-label" for="address">Alamat</label>
-                            <textarea id="address" class="form-control">Jl. Teuku Umar No. 12</textarea>
+                            <textarea id="address" class="form-control" readonly disabled>Jl. Teuku Umar No. 12</textarea>
                         </div>
                     </div>
-                    <button class="btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
+                    <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
                 </form>
             </section>
+
         </main>
     </div>
 </body>

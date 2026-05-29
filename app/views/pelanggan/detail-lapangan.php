@@ -55,9 +55,9 @@
                     <span>Futsal</span>
                     <strong><i class="fas fa-star"></i> 4.9</strong>
                 </div>
-                <h1>Gelora Bung Karno Arena</h1>
-                <p class="booking-location"><i class="fas fa-map-marker-alt"></i> Senayan, Jakarta Pusat</p>
-                <p class="booking-copy">Lapangan futsal indoor dengan permukaan sintetis, pencahayaan malam, ruang tunggu, parkir luas, dan akses mudah dari area utama Senayan.</p>
+                <h1>Kedaton Futsal Arena</h1>
+                <p class="booking-location"><i class="fas fa-map-marker-alt"></i> Kedaton, Bandar Lampung</p>
+                <p class="booking-copy">Lapangan futsal indoor dengan permukaan sintetis, pencahayaan malam, ruang tunggu, parkir luas, dan akses mudah dari area utama Kedaton.</p>
 
                 <div class="facility-list">
                     <span><i class="fas fa-shower"></i> Shower</span>

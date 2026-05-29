@@ -20,7 +20,7 @@
                 <li><a href="<?= BASEURL; ?>/pelanggan/booking"><i class="fas fa-calendar-check"></i> Riwayat Booking</a></li>
                 <li><a href="<?= BASEURL; ?>/pelanggan/profile"><i class="fas fa-user"></i> Profile Saya</a></li>
                 <li><a href="<?= BASEURL; ?>/pelanggan/lapangan" class="active"><i class="fas fa-search"></i> Cari Lapangan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -40,10 +40,29 @@
 
                 <section class="table-container booking-detail-section">
 
+                    <?php 
+                        $foto = !empty($data['lapangan']['foto_utama']) ? $data['lapangan']['foto_utama'] : 'default_lapangan.jpg';
+                        $img_fallback = 'bola.png';
+                        $chip_class = 'info';
+                        if (strtolower($data['lapangan']['nama_kategori']) === 'tennis' || strtolower($data['lapangan']['nama_kategori']) === 'tenis') {
+                            $chip_class = 'success';
+                            $img_fallback = 'tenis.jpg';
+                        } elseif (strtolower($data['lapangan']['nama_kategori']) === 'badminton') {
+                            $chip_class = 'warning';
+                            $img_fallback = 'badminton.jpg';
+                        } elseif (strtolower($data['lapangan']['nama_kategori']) === 'basket') {
+                            $chip_class = 'danger';
+                            $img_fallback = 'basket.jpg';
+                        }
+                        
+                        $facilities = !empty($data['lapangan']['fasilitas']) ? explode(',', $data['lapangan']['fasilitas']) : ['Locker', 'Kantin', 'Parkir'];
+                    ?>
                     <div class="booking-gallery">
-                        <img src="<?= BASEURL; ?>/public/assets/img/bola.png" alt="Gelora Bung Karno Arena" class="booking-cover">
+                        <img src="<?= BASEURL; ?>/public/assets/uploads/lapangan/<?= $foto; ?>" 
+                             onerror="this.onerror=null; this.src='<?= BASEURL; ?>/public/assets/img/<?= $img_fallback; ?>';" alt="<?= htmlspecialchars($data['lapangan']['nama_lapangan']); ?>" class="booking-cover">
                         <div class="booking-thumbs">
-                            <img src="<?= BASEURL; ?>/public/assets/img/bola.png" alt="Lapangan futsal">
+                            <img src="<?= BASEURL; ?>/public/assets/uploads/lapangan/<?= $foto; ?>" 
+                                 onerror="this.onerror=null; this.src='<?= BASEURL; ?>/public/assets/img/<?= $img_fallback; ?>';" alt="Cover">
                             <img src="<?= BASEURL; ?>/public/assets/img/basket indoor.jpg" alt="Area indoor">
                             <img src="<?= BASEURL; ?>/public/assets/img/tenis2.jpeg" alt="Area fasilitas">
                         </div>
@@ -51,98 +70,91 @@
 
                     <div class="booking-info">
                         <div class="venue-topline">
-                            <span>Futsal</span>
-                            <strong><i class="fas fa-star"></i> 4.9</strong>
+                            <span class="sport-chip <?= $chip_class; ?>" style="font-size: 0.7rem; padding: 2px 8px; margin: 0;"><?= htmlspecialchars($data['lapangan']['nama_kategori']); ?></span>
+                            <strong><i class="fas fa-star" style="color: var(--text-gold);"></i> <?= number_format($data['rating'], 1); ?></strong>
                         </div>
-                        <h2>Gelora Bung Karno Arena</h2>
-                        <p class="booking-location"><i class="fas fa-map-marker-alt"></i> Senayan, Jakarta Pusat</p>
-                        <p class="booking-copy">Lapangan futsal indoor dengan permukaan sintetis, pencahayaan malam, ruang tunggu, parkir luas, dan akses mudah dari area utama Senayan.</p>
+                        <h2><?= htmlspecialchars($data['lapangan']['nama_lapangan']); ?></h2>
+                        <p class="booking-location"><i class="fas fa-map-marker-alt"></i> Bandar Lampung</p>
+                        <p class="booking-copy"><?= htmlspecialchars($data['lapangan']['deskripsi']); ?></p>
 
                         <div class="facility-list">
-                            <span><i class="fas fa-shower"></i> Shower</span>
-                            <span><i class="fas fa-car"></i> Parkir</span>
-                            <span><i class="fas fa-wifi"></i> WiFi</span>
-                            <span><i class="fas fa-mug-hot"></i> Cafe</span>
+                            <?php foreach($facilities as $facility): ?>
+                                <span><i class="fas fa-check-circle"></i> <?= htmlspecialchars(trim($facility)); ?></span>
+                            <?php endforeach; ?>
                         </div>
 
-                        <div class="schedule-board">
-                            <h3>Slot Tersedia</h3>
-                            <div class="slot-grid">
-                                <button id="slot-0800">08:00</button>
-                                <button class="active" id="slot-0900">09:00</button>
-                                <button id="slot-1000">10:00</button>
-                                <button id="slot-1300">13:00</button>
-                                <button id="slot-1500">15:00</button>
-                                <button disabled id="slot-1900">19:00</button>
-                            </div>
+                        <div class="schedule-board" style="margin-top: 25px;">
+                            <h3>Informasi Jadwal</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-clock"></i> Silakan pilih tanggal dan masukkan waktu bermain Anda pada formulir pemesanan di sebelah kanan.</p>
                         </div>
                     </div>
 
                     <div class="table-header section-offset">
                         <h3 class="table-title"><i class="fas fa-star icon-warning"></i> Review Pelanggan</h3>
-                        <span class="status-badge status-success">4.9 / 5</span>
+                        <span class="status-badge status-success"><?= number_format($data['rating'], 1); ?> / 5</span>
                     </div>
                     <div class="stack">
-                        <div class="list-row">
-                            <div>
-                                <h4>Andi Saputra</h4>
-                                <small>28 Apr 2026 &bull; Futsal</small>
-                                <p>Lapangan sangat bersih dan terawat, pencahayaan malam bagus sekali. Rekomen!</p>
+                        <?php if (empty($data['review'])): ?>
+                            <div style="text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.9rem;">
+                                <i class="far fa-comment-dots" style="font-size: 2rem; margin-bottom: 8px; display: block; color: var(--text-muted);"></i>
+                                Belum ada review untuk lapangan ini.
                             </div>
-                            <span class="status-badge status-success"><i class="fas fa-star"></i> 5</span>
-                        </div>
-                        <div class="list-row">
-                            <div>
-                                <h4>Citra Lestari</h4>
-                                <small>20 Apr 2026 &bull; Futsal</small>
-                                <p>Parkir luas, staff ramah. Akan booking lagi bulan depan.</p>
-                            </div>
-                            <span class="status-badge status-success"><i class="fas fa-star"></i> 5</span>
-                        </div>
-                        <div class="list-row">
-                            <div>
-                                <h4>Budi Santoso</h4>
-                                <small>15 Apr 2026 &bull; Futsal</small>
-                                <p>Lokasi strategis, tapi antrian checkout sedikit lama.</p>
-                            </div>
-                            <span class="status-badge status-info"><i class="fas fa-star"></i> 4</span>
-                        </div>
+                        <?php else: ?>
+                            <?php foreach($data['review'] as $review): ?>
+                                <div class="list-row">
+                                    <div>
+                                        <h4><?= htmlspecialchars($review['nama']); ?></h4>
+                                        <small><?= date('d M Y', strtotime($review['created_at'])); ?> &bull; <?= htmlspecialchars($review['nama_kategori']); ?></small>
+                                        <p><?= htmlspecialchars($review['komentar']); ?></p>
+                                    </div>
+                                    <span class="status-badge status-success"><i class="fas fa-star"></i> <?= $review['rating']; ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
+
 
                 </section>
 
                 <aside class="checkout-panel" id="panel-booking">
-                    <h2>Ringkasan Booking</h2>
-                    <form action="<?= BASEURL; ?>/pelanggan/pembayaran" id="form-booking-lapangan">
+                    <h2>Buat Pesanan</h2>
+                    <form action="<?= BASEURL; ?>/pelanggan/proses_booking" method="POST" id="form-booking-lapangan">
+                        <input type="hidden" name="id_lapangan" value="<?= $data['lapangan']['id']; ?>">
+                        
                         <div class="form-group">
-                            <label class="form-label" for="booking-date">Tanggal</label>
-                            <input type="date" id="booking-date" class="form-control">
+                            <label class="form-label" for="booking-date">Tanggal Main</label>
+                            <input type="date" name="tanggal_main" id="booking-date" class="form-control" required>
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label" for="booking-duration">Durasi</label>
-                            <select id="booking-duration" class="form-control">
-                                <option>1 Jam</option>
-                                <option>2 Jam</option>
-                                <option>3 Jam</option>
+                            <label class="form-label" for="booking-time">Jam Mulai</label>
+                            <input type="time" name="jam_mulai" id="booking-time" class="form-control" required style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 6px;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="booking-duration">Durasi Main</label>
+                            <select name="durasi" id="booking-duration" class="form-control" required>
+                                <option value="1">1 Jam</option>
+                                <option value="2">2 Jam</option>
+                                <option value="3">3 Jam</option>
                             </select>
                         </div>
+                        
                         <div class="checkout-row">
                             <span>Harga per jam</span>
-                            <strong>Rp 350.000</strong>
+                            <strong>Rp <?= number_format($data['lapangan']['harga_per_jam'], 0, ',', '.'); ?></strong>
                         </div>
-                        <div class="checkout-row">
-                            <span>Biaya layanan</span>
-                            <strong>Rp 5.000</strong>
+                        
+                        <div style="margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 15px; color: var(--text-muted); font-size: 0.8rem;">
+                            * Total harga sewa akan dihitung otomatis sesuai durasi sewa Anda.
                         </div>
-                        <div class="checkout-total">
-                            <span>Total</span>
-                            <strong>Rp 355.000</strong>
-                        </div>
-                        <button type="submit" class="btn-primary btn-auth" id="btn-bayar-sekarang">
-                            <i class="fas fa-bolt"></i> Bayar Sekarang
+                        
+                        <button type="submit" class="btn-primary btn-auth" id="btn-bayar-sekarang" style="margin-top: 20px;">
+                            <i class="fas fa-check-circle"></i> Pesan Sekarang
                         </button>
                     </form>
                 </aside>
+
 
             </div>
         </main>
