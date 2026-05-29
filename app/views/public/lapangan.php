@@ -71,10 +71,11 @@
                     <label class="form-label" for="location">Lokasi</label>
                     <select id="location" class="form-control">
                         <option>Semua Lokasi</option>
-                        <option>Jakarta Pusat</option>
-                        <option>Jakarta Selatan</option>
-                        <option>Jakarta Timur</option>
-                        <option>Bandar Lampung</option>
+                        <option>Kedaton</option>
+                        <option>Sukarame</option>
+                        <option>Way Halim</option>
+                        <option>Kemiling</option>
+                        <option>Tanjung Karang</option>
                     </select>
                 </div>
                 <button class="btn-primary filter-button">
@@ -85,7 +86,7 @@
             <div class="catalog-content">
                 <div class="catalog-toolbar">
                     <div>
-                        <span>8 lapangan tersedia</span>
+                        <span>5 lapangan tersedia</span>
                         <strong>Rekomendasi hari ini</strong>
                     </div>
                     <select class="form-control sort-select">
@@ -103,16 +104,16 @@
                                 <span>Futsal</span>
                                 <strong><i class="fas fa-star"></i> 4.9</strong>
                             </div>
-                            <h2>Gelora Bung Karno Arena</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Senayan, Jakarta Pusat</p>
+                            <h2>Inter Futsal Kedaton</h2>
+                            <p><i class="fas fa-map-marker-alt"></i> Kedaton, Bandar Lampung</p>
                             <div class="venue-meta">
                                 <span>Indoor</span>
                                 <span>08:00 - 22:00</span>
                                 <span>12 slot</span>
                             </div>
                             <div class="venue-footer">
-                                <div class="venue-price">Rp 350.000<span>/jam</span></div>
-                                <a href="../pelanggan/detail-lapangan.html" class="btn-secondary">Detail</a>
+                                <div class="venue-price">Rp 150.000<span>/jam</span></div>
+                                <a href="<?= BASEURL; ?>/auth/login" class="btn-secondary">Detail</a>
                             </div>
                         </div>
                     </article>
@@ -124,16 +125,16 @@
                                 <span>Tennis</span>
                                 <strong><i class="fas fa-star"></i> 4.8</strong>
                             </div>
-                            <h2>Cilandak Sport Center</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Cilandak, Jakarta Selatan</p>
+                            <h2>Kemiling Tennis Club</h2>
+                            <p><i class="fas fa-map-marker-alt"></i> Kemiling, Bandar Lampung</p>
                             <div class="venue-meta">
                                 <span>Outdoor</span>
                                 <span>06:00 - 21:00</span>
                                 <span>9 slot</span>
                             </div>
                             <div class="venue-footer">
-                                <div class="venue-price">Rp 150.000<span>/jam</span></div>
-                                <a href="../pelanggan/detail-lapangan.html" class="btn-secondary">Detail</a>
+                                <div class="venue-price">Rp 100.000<span>/jam</span></div>
+                                <a href="<?= BASEURL; ?>/auth/login" class="btn-secondary">Detail</a>
                             </div>
                         </div>
                     </article>
@@ -145,16 +146,16 @@
                                 <span>Badminton</span>
                                 <strong><i class="fas fa-star"></i> 4.9</strong>
                             </div>
-                            <h2>Taufik Hidayat Arena</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Ciracas, Jakarta Timur</p>
+                            <h2>Sukarame Badminton Hall</h2>
+                            <p><i class="fas fa-map-marker-alt"></i> Sukarame, Bandar Lampung</p>
                             <div class="venue-meta">
                                 <span>Indoor</span>
                                 <span>07:00 - 23:00</span>
                                 <span>15 slot</span>
                             </div>
                             <div class="venue-footer">
-                                <div class="venue-price">Rp 100.000<span>/jam</span></div>
-                                <a href="../pelanggan/detail-lapangan.html" class="btn-secondary">Detail</a>
+                                <div class="venue-price">Rp 80.000<span>/jam</span></div>
+                                <a href="<?= BASEURL; ?>/auth/login" class="btn-secondary">Detail</a>
                             </div>
                         </div>
                     </article>
@@ -166,16 +167,16 @@
                                 <span>Basket</span>
                                 <strong><i class="fas fa-star"></i> 4.7</strong>
                             </div>
-                            <h2>South Court Basketball</h2>
-                            <p><i class="fas fa-map-marker-alt"></i> Kemang, Jakarta Selatan</p>
+                            <h2>Way Halim Basketball Court</h2>
+                            <p><i class="fas fa-map-marker-alt"></i> Way Halim, Bandar Lampung</p>
                             <div class="venue-meta">
                                 <span>Outdoor</span>
                                 <span>08:00 - 20:00</span>
                                 <span>7 slot</span>
                             </div>
                             <div class="venue-footer">
-                                <div class="venue-price">Rp 180.000<span>/jam</span></div>
-                                <a href="../pelanggan/detail-lapangan.html" class="btn-secondary">Detail</a>
+                                <div class="venue-price">Rp 120.000<span>/jam</span></div>
+                                <a href="<?= BASEURL; ?>/auth/login" class="btn-secondary">Detail</a>
                             </div>
                         </div>
                     </article>

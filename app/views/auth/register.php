@@ -24,26 +24,28 @@
                 <h2 class="auth-subtitle">Bersama Kami</h2>
             </div>
 
-            <form action="../pelanggan/pelanggan.html">
+            <?php Flasher::flash(); ?>
+
+            <form action="<?= BASEURL; ?>/auth/prosesRegister" method="POST">
                 <div class="form-group">
                     <label class="form-label" for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" class="form-control" placeholder="Masukkan nama Anda" required>
+                    <input type="text" id="nama" name="nama" class="form-control" placeholder="Masukkan nama Anda" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="email">Alamat Email</label>
-                    <input type="email" id="email" class="form-control" placeholder="Masukkan email Anda" required>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Masukkan email Anda" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="password">Kata Sandi</label>
-                    <input type="password" id="password" class="form-control" placeholder="Buat kata sandi baru"
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Buat kata sandi baru"
                         required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="confirm-password">Konfirmasi Sandi</label>
-                    <input type="password" id="confirm-password" class="form-control" placeholder="Ulangi kata sandi"
+                    <input type="password" id="confirm-password" name="confirm-password" class="form-control" placeholder="Ulangi kata sandi"
                         required>
                 </div>
 
@@ -51,6 +53,7 @@
                     Buat Akun
                 </button>
             </form>
+
 
             <div class="auth-footer">
                 Sudah memiliki akun? <a href="<?= BASEURL; ?>/auth/login">Masuk di sini</a>

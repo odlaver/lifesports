@@ -24,15 +24,17 @@
                 <h2 class="auth-subtitle">Kembali</h2>
             </div>
 
-            <form action="../pelanggan/pelanggan.html">
+            <?php Flasher::flash(); ?>
+
+            <form action="<?= BASEURL; ?>/auth/prosesLogin" method="POST">
                 <div class="form-group">
                     <label class="form-label" for="email">Alamat Email</label>
-                    <input type="email" id="email" class="form-control" placeholder="Masukkan email Anda" required>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Masukkan email Anda" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="password">Kata Sandi</label>
-                    <input type="password" id="password" class="form-control" placeholder="Masukkan kata sandi"
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Masukkan kata sandi"
                         required>
                 </div>
 
@@ -44,6 +46,7 @@
                     Masuk Sekarang
                 </button>
             </form>
+
 
             <div class="auth-footer">
                 Belum memiliki akun? <a href="<?= BASEURL; ?>/auth/register">Daftar Gratis</a>

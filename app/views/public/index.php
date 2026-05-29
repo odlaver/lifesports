@@ -42,7 +42,7 @@
     <section class="hero container">
         <div class="hero-content">
             <div class="est-badge">
-                    <i class="fas fa-gem icon-small"></i> EST. 2024 - BANDAR LAMPUNG
+                    <i class="fas fa-gem icon-small"></i> EST. 2026 - BANDAR LAMPUNG
             </div>
 
             <h1 class="hero-title">Reservasi Fasilitas</h1>
@@ -66,7 +66,7 @@
             <div class="booking-widget">
                 <div class="widget-header">
                     <i class="fas fa-calendar-alt"></i>
-                    <span>APRIL 2024</span>
+                    <span>APRIL 2026</span>
                     <div class="widget-arrows">
                         <i class="fas fa-chevron-left"></i>
                         <i class="fas fa-chevron-right"></i>
@@ -163,15 +163,15 @@
                 <img src="<?= BASEURL; ?>/public/assets/img/bola.png" alt="Futsal Field" class="card-img">
                 <div class="card-content">
                     <div class="card-category">FUTSAL</div>
-                    <h3 class="card-title">Gelora Bung Karno Arena</h3>
+                    <h3 class="card-title">Kedaton Futsal Arena</h3>
                     <div class="card-info">
-                        <div><i class="fas fa-map-marker-alt"></i> Senayan, Jakarta Pusat</div>
-                        <div><i class="fas fa-user-tie"></i> Kemenpora RI</div>
+                        <div><i class="fas fa-map-marker-alt"></i> Kedaton, Bandar Lampung</div>
+                        <div><i class="fas fa-user-tie"></i> Kemenpora Lampung</div>
                     </div>
                     <div class="card-footer">
-                        <div class="card-price">Rp 350.000<span class="price-unit">/jam</span>
+                        <div class="card-price">Rp 150.000<span class="price-unit">/jam</span>
                         </div>
-                        <a href="../pelanggan/detail-lapangan.html" class="btn-secondary compact-button">Detail</a>
+                        <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
                     </div>
                 </div>
             </div>
@@ -182,15 +182,15 @@
                     alt="Tennis Field" class="card-img">
                 <div class="card-content">
                     <div class="card-category">TENNIS</div>
-                    <h3 class="card-title">Cilandak Sport Center</h3>
+                    <h3 class="card-title">Sukarame Sport Center</h3>
                     <div class="card-info">
-                        <div><i class="fas fa-map-marker-alt"></i> Cilandak, Jakarta Selatan</div>
-                        <div><i class="fas fa-user-tie"></i> PT. Cilandak Jaya</div>
+                        <div><i class="fas fa-map-marker-alt"></i> Sukarame, Bandar Lampung</div>
+                        <div><i class="fas fa-user-tie"></i> PT. Sukarame Jaya</div>
                     </div>
                     <div class="card-footer">
-                        <div class="card-price">Rp 150.000<span class="price-unit">/jam</span>
+                        <div class="card-price">Rp 100.000<span class="price-unit">/jam</span>
                         </div>
-                        <a href="../pelanggan/detail-lapangan.html" class="btn-secondary compact-button">Detail</a>
+                        <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
                     </div>
                 </div>
             </div>
@@ -201,15 +201,15 @@
                     alt="Badminton Field" class="card-img">
                 <div class="card-content">
                     <div class="card-category">BADMINTON</div>
-                    <h3 class="card-title">Taufik Hidayat Arena</h3>
+                    <h3 class="card-title">Way Halim Badminton Arena</h3>
                     <div class="card-info">
-                        <div><i class="fas fa-map-marker-alt"></i> Ciracas, Jakarta Timur</div>
-                        <div><i class="fas fa-user-tie"></i> THA Management</div>
+                        <div><i class="fas fa-map-marker-alt"></i> Way Halim, Bandar Lampung</div>
+                        <div><i class="fas fa-user-tie"></i> WHM Management</div>
                     </div>
                     <div class="card-footer">
-                        <div class="card-price">Rp 100.000<span class="price-unit">/jam</span>
+                        <div class="card-price">Rp 80.000<span class="price-unit">/jam</span>
                         </div>
-                        <a href="../pelanggan/detail-lapangan.html" class="btn-secondary compact-button">Detail</a>
+                        <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
                     </div>
                 </div>
             </div>
@@ -280,7 +280,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2024 Lifesports Premium Club. Bandar Lampung.
+                &copy; 2026 Lifesports Premium Club. Bandar Lampung.
             </div>
         </div>
     </footer>
