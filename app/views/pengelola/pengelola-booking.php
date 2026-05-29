@@ -17,7 +17,7 @@
                 <li><a href="<?= BASEURL; ?>/pengelola/booking" class="active"><i class="fas fa-calendar-check"></i> Booking Masuk</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/pembayaran"><i class="fas fa-credit-card"></i> Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
         <main class="main-content">
@@ -27,8 +27,40 @@
                 <table class="data-table">
                     <thead><tr><th>Kode</th><th>Pelanggan</th><th>Lapangan</th><th>Jadwal</th><th>Status</th><th>Aksi</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>BKG20260511001</strong></td><td>Deni Ramdani</td><td>GBK Arena</td><td>11 Mei 2026, 09:00</td><td><span class="status-badge status-warning">Pending</span></td><td><a href="<?= BASEURL; ?>/pengelola/booking_detail" class="btn-action"><i class="fas fa-eye"></i></a></td></tr>
-                        <tr><td><strong>BKG20260510007</strong></td><td>Citra Lestari</td><td>Cilandak Sport</td><td>10 Mei 2026, 08:00</td><td><span class="status-badge status-info">Confirmed</span></td><td><a href="<?= BASEURL; ?>/pengelola/booking_detail" class="btn-action"><i class="fas fa-eye"></i></a></td></tr>
+                        <?php if (empty($data['booking'])): ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                    Belum ada booking masuk.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($data['booking'] as $row): 
+                                $status_class = 'status-pending';
+                                $status_label = 'Pending';
+                                if ($row['status'] === 'dibayar') {
+                                    $status_class = 'status-info';
+                                    $status_label = 'Dibayar';
+                                } elseif ($row['status'] === 'dikonfirmasi') {
+                                    $status_class = 'status-warning';
+                                    $status_label = 'Dikonfirmasi';
+                                } elseif ($row['status'] === 'selesai') {
+                                    $status_class = 'status-success';
+                                    $status_label = 'Selesai';
+                                } elseif ($row['status'] === 'dibatalkan') {
+                                    $status_class = 'status-danger';
+                                    $status_label = 'Dibatalkan';
+                                }
+                            ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($row['kode_booking']); ?></strong></td>
+                                    <td><?= htmlspecialchars($row['nama_pelanggan']); ?></td>
+                                    <td><?= htmlspecialchars($row['nama_lapangan']); ?> (<?= htmlspecialchars($row['nama_kategori']); ?>)</td>
+                                    <td><?= date('d M Y', strtotime($row['tanggal_main'])); ?>, <?= date('H:i', strtotime($row['jam_mulai'])); ?></td>
+                                    <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
+                                    <td><a href="<?= BASEURL; ?>/pengelola/booking_detail/<?= $row['id']; ?>" class="btn-action"><i class="fas fa-eye"></i></a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>

@@ -23,7 +23,7 @@
                 <li><a href="<?= BASEURL; ?>/pengelola/booking"><i class="fas fa-calendar-check"></i> Booking Masuk</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/pembayaran"><i class="fas fa-credit-card"></i> Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
 
@@ -32,12 +32,12 @@
             <header class="dashboard-header">
                 <div class="dash-title">
                     <h1>Sistem Pengelola</h1>
-                    <p>Sistem Manajemen Akses - <strong>Bpk. Sudirman</strong></p>
+                    <p>Sistem Manajemen Akses - <strong><?= htmlspecialchars($_SESSION['nama']); ?></strong></p>
                 </div>
 
                 <div class="dash-profile">
                     <div class="profile-info">
-                        <div class="profile-name">Bpk. Sudirman</div>
+                        <div class="profile-name"><?= htmlspecialchars($_SESSION['nama']); ?></div>
                         <div class="profile-role">Mitra Pengelola</div>
                     </div>
                     <div class="profile-img">
@@ -46,28 +46,31 @@
                 </div>
             </header>
 
+
+            <?php if ($data['booking_pending_count'] > 0): ?>
             <div class="alert warning">
                 <div>
                     <i class="fas fa-exclamation-triangle"></i>
-                    <strong>Peringatan Sistem:</strong> Terdapat 5 reservasi yang memerlukan verifikasi.
+                    <strong>Peringatan Sistem:</strong> Terdapat <?= $data['booking_pending_count']; ?> reservasi yang memerlukan verifikasi.
                 </div>
                 <a href="#booking-pending">Tinjau Reservasi</a>
             </div>
+            <?php endif; ?>
 
             <div class="dash-stats">
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-building"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Lapangan</h3>
-                        <div class="value">3</div>
-                        <small>Tersedia: 3</small>
+                        <div class="value"><?= $data['total_lapangan']; ?></div>
+                        <small>Tersedia: <?= $data['total_lapangan_aktif']; ?></small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon warning"><i class="fas fa-clock"></i></div>
                     <div class="dash-card-info">
                         <h3>Booking Pending</h3>
-                        <div class="value value-warning">5</div>
+                        <div class="value value-warning"><?= $data['booking_pending_count']; ?></div>
                         <small>Perlu konfirmasi</small>
                     </div>
                 </div>
@@ -75,15 +78,15 @@
                     <div class="dash-card-icon"><i class="fas fa-calendar-check"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Booking</h3>
-                        <div class="value">45</div>
-                        <small>Selesai: 32</small>
+                        <div class="value"><?= $data['total_booking']; ?></div>
+                        <small>Selesai: <?= $data['total_booking_selesai']; ?></small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-wallet"></i></div>
                     <div class="dash-card-info">
                         <h3>Pendapatan Bulan Ini</h3>
-                        <div class="value value-compact">Rp 4.500.000</div>
+                        <div class="value value-compact">Rp <?= number_format($data['pendapatan_total'], 0, ',', '.'); ?></div>
                     </div>
                 </div>
             </div>
@@ -93,28 +96,26 @@
                 <div class="table-container">
                     <div class="table-header">
                         <h2 class="table-title"><i class="fas fa-clock icon-warning"></i>Booking Pending</h2>
-                        <button class="btn-primary compact-button">Lihat Semua</button>
+                        <a href="<?= BASEURL; ?>/pengelola/booking" class="btn-primary compact-button">Lihat Semua</a>
                     </div>
 
                     <div class="stack">
-
-                        <div class="list-row">
-                            <div>
-                                <h4>BKG2026042812345</h4>
-                                <p>Gelora Bung Karno (Futsal)</p>
-                                <small>Andi Saputra - 28 Apr 2026 - 19:00-21:00</small>
+                        <?php if (empty($data['booking_pending'])): ?>
+                            <div style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 0.9rem;">
+                                Tidak ada booking pending saat ini.
                             </div>
-                            <button class="btn-primary compact-button ghost-warning"><i class="fas fa-check-circle"></i> Konfirmasi</button>
-                        </div>
-
-                        <div class="list-row">
-                            <div>
-                                <h4>BKG2026042812346</h4>
-                                <p>Cilandak Sport (Tennis)</p>
-                                <small>Budi Santoso - 29 Apr 2026 - 08:00-10:00</small>
-                            </div>
-                            <button class="btn-primary compact-button ghost-warning"><i class="fas fa-check-circle"></i> Konfirmasi</button>
-                        </div>
+                        <?php else: ?>
+                            <?php foreach ($data['booking_pending'] as $row): ?>
+                                <div class="list-row">
+                                    <div>
+                                        <h4><?= htmlspecialchars($row['kode_booking']); ?></h4>
+                                        <p><?= htmlspecialchars($row['nama_lapangan']); ?> (<?= htmlspecialchars($row['nama_kategori']); ?>)</p>
+                                        <small><?= htmlspecialchars($row['nama_pelanggan']); ?> - <?= date('d M Y', strtotime($row['tanggal_main'])); ?> - <?= date('H:i', strtotime($row['jam_mulai'])); ?>-<?= date('H:i', strtotime($row['jam_selesai'])); ?></small>
+                                    </div>
+                                    <a href="<?= BASEURL; ?>/pengelola/booking_detail/<?= $row['id']; ?>" class="btn-primary compact-button ghost-warning"><i class="fas fa-check-circle"></i> Tinjau</a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -124,22 +125,21 @@
                     </div>
 
                     <div class="stack">
-
-                        <div class="list-row">
-                            <div>
-                                <p>Gelora Bung Karno (Futsal)</p>
-                                <small>Andi Saputra - 19:00 - 21:00 (2 jam)</small>
+                        <?php if (empty($data['booking_hari_ini'])): ?>
+                            <div style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 0.9rem;">
+                                Tidak ada booking hari ini.
                             </div>
-                            <span class="status-badge status-success">Selesai</span>
-                        </div>
-
-                        <div class="list-row">
-                            <div>
-                                <p>Taufik Hidayat Arena</p>
-                                <small>Citra Lestari - 15:00 - 17:00 (2 jam)</small>
-                            </div>
-                            <span class="status-badge status-info">Confirmed</span>
-                        </div>
+                        <?php else: ?>
+                            <?php foreach ($data['booking_hari_ini'] as $row): ?>
+                                <div class="list-row">
+                                    <div>
+                                        <p><?= htmlspecialchars($row['nama_lapangan']); ?></p>
+                                        <small><?= htmlspecialchars($row['nama_pelanggan']); ?> - <?= date('H:i', strtotime($row['jam_mulai'])); ?> - <?= date('H:i', strtotime($row['jam_selesai'])); ?></small>
+                                    </div>
+                                    <span class="status-badge status-success"><?= htmlspecialchars(ucfirst($row['status'])); ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -162,30 +162,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>Gelora Bung Karno Arena</strong></td>
-                            <td>Jakarta Pusat</td>
-                            <td>Rp 350.000</td>
-                            <td><i class="fas fa-star"></i> 4.9</td>
-                            <td>42x</td>
-                            <td><span class="status-badge status-success">Tersedia</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Cilandak Sport Center</strong></td>
-                            <td>Jakarta Selatan</td>
-                            <td>Rp 150.000</td>
-                            <td><i class="fas fa-star"></i> 4.8</td>
-                            <td>38x</td>
-                            <td><span class="status-badge status-success">Tersedia</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Taufik Hidayat Arena</strong></td>
-                            <td>Jakarta Timur</td>
-                            <td>Rp 100.000</td>
-                            <td><i class="fas fa-star"></i> 4.9</td>
-                            <td>31x</td>
-                            <td><span class="status-badge status-warning">Maintenance</span></td>
-                        </tr>
+                        <?php if (empty($data['lapangan_populer'])): ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                    Belum ada data lapangan.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($data['lapangan_populer'] as $row): ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($row['nama_lapangan']); ?></strong></td>
+                                    <td>Bandar Lampung</td>
+                                    <td>Rp <?= number_format($row['harga_per_jam'], 0, ',', '.'); ?></td>
+                                    <td><i class="fas fa-star" style="color: var(--text-gold);"></i> 5.0</td>
+                                    <td><?= $row['total_booking']; ?>x</td>
+                                    <td><span class="status-badge status-success"><?= htmlspecialchars(ucfirst($row['status'])); ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

@@ -17,7 +17,7 @@
                 <li><a href="<?= BASEURL; ?>/pengelola/booking"><i class="fas fa-calendar-check"></i> Booking Masuk</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/pembayaran"><i class="fas fa-credit-card"></i> Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
-                <li><a href="<?= BASEURL; ?>/auth/login" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+                <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
         <main class="main-content">
@@ -35,9 +35,27 @@
                 <table class="data-table">
                     <thead><tr><th>Lapangan</th><th>Kategori</th><th>Harga</th><th>Total Booking</th><th>Status</th><th>Aksi</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>Gelora Bung Karno Arena</strong><br><small>Senayan, Jakarta Pusat</small></td><td>Futsal</td><td>Rp 350.000/jam</td><td>42x</td><td><span class="status-badge status-success">Tersedia</span></td><td><a href="<?= BASEURL; ?>/pengelola/lapangan_form" class="btn-action"><i class="fas fa-pen"></i></a></td></tr>
-                        <tr><td><strong>Cilandak Sport Center</strong><br><small>Cilandak, Jakarta Selatan</small></td><td>Tennis</td><td>Rp 150.000/jam</td><td>38x</td><td><span class="status-badge status-success">Tersedia</span></td><td><a href="<?= BASEURL; ?>/pengelola/lapangan_form" class="btn-action"><i class="fas fa-pen"></i></a></td></tr>
-                        <tr><td><strong>Taufik Hidayat Arena</strong><br><small>Ciracas, Jakarta Timur</small></td><td>Badminton</td><td>Rp 100.000/jam</td><td>31x</td><td><span class="status-badge status-warning">Maintenance</span></td><td><a href="<?= BASEURL; ?>/pengelola/lapangan_form" class="btn-action"><i class="fas fa-pen"></i></a></td></tr>
+                        <?php if (empty($data['lapangan'])): ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                    Belum ada data lapangan yang Anda miliki.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($data['lapangan'] as $row): 
+                                $status_class = $row['status'] === 'aktif' ? 'status-success' : 'status-danger';
+                                $status_label = $row['status'] === 'aktif' ? 'Tersedia' : 'Nonaktif';
+                            ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($row['nama_lapangan']); ?></strong><br><small>Bandar Lampung</small></td>
+                                    <td><?= htmlspecialchars($row['nama_kategori']); ?></td>
+                                    <td>Rp <?= number_format($row['harga_per_jam'], 0, ',', '.'); ?>/jam</td>
+                                    <td><?= $row['total_booking']; ?>x</td>
+                                    <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
+                                    <td><a href="<?= BASEURL; ?>/pengelola/lapangan_form/<?= $row['id']; ?>" class="btn-action"><i class="fas fa-pen"></i></a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>
