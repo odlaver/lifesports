@@ -41,51 +41,85 @@
                 <div class="table-header">
                     <h2 class="table-title"><i class="fas fa-user-edit"></i> Data Akun</h2>
                 </div>
-                <form class="form-panel" id="form-user" action="#" method="post">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="input-nama-lengkap">Nama Lengkap</label>
-                            <input class="form-control" id="input-nama-lengkap" name="nama_lengkap" type="text" placeholder="Nama lengkap pengguna" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-email">Email</label>
-                            <input class="form-control" id="input-email" name="email" type="email" placeholder="email@domain.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-no-hp">No. HP</label>
-                            <input class="form-control" id="input-no-hp" name="no_hp" type="tel" placeholder="08xxxxxxxxxx">
-                        </div>
-                        <div class="form-group">
-                            <label for="select-role">Role</label>
-                            <select class="form-control" id="select-role" name="role" required>
-                                <option value="">-- Pilih Role --</option>
-                                <option value="pelanggan">Pelanggan</option>
-                                <option value="pengelola">Pengelola</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="select-status-form">Status Akun</label>
-                            <select class="form-control" id="select-status-form" name="status">
-                                <option value="aktif">Aktif</option>
-                                <option value="nonaktif">Nonaktif</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-password">Password</label>
-                            <input class="form-control" id="input-password" name="password" type="password" placeholder="Kosongkan jika tidak diubah">
-                        </div>
-                    </div>
+               <form action="<?= BASEURL; ?>/admin/simpan_user" method="post">
+                <input type="hidden" name="id" value="<?= $data['user']['id'] ?? ''; ?>">
+    <div class="form-grid two-col">
+        <div class="form-group">
+            <label for="nama">Nama Lengkap</label>
+            <input 
+                class="form-control" 
+                name="nama" 
+                type="text" 
+                placeholder="Nama lengkap pengguna"
+                value="<?= $data['user']['nama'] ?? ''; ?>"
+                required
+            >
+        </div>
 
-                    <div class="form-actions">
-                        <button class="btn-primary" id="btn-simpan-user" type="submit">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
-                        <a href="<?= BASEURL; ?>/admin/users" class="btn-primary ghost-light" id="btn-batal-user">
-                            <i class="fas fa-times"></i> Batal
-                        </a>
-                    </div>
-                </form>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+                class="form-control" 
+                name="email" 
+                type="email" 
+                placeholder="email@domain.com"
+                value="<?= $data['user']['email'] ?? ''; ?>"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="no_telp">No. HP</label>
+           <input 
+                class="form-control" 
+                name="no_telp" 
+                type="text" 
+                placeholder="08xxxxxxxxxx"
+                value="<?= $data['user']['no_telp'] ?? ''; ?>"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select class="form-control" id="role" name="role" required>
+                <option value="">-- Pilih Role --</option>
+                <option value="pelanggan" <?= (($data['user']['role'] ?? '') == 'pelanggan') ? 'selected' : ''; ?>>Pelanggan</option>
+                <option value="pengelola" <?= (($data['user']['role'] ?? '') == 'pengelola') ? 'selected' : ''; ?>>Pengelola</option>
+                <option value="admin" <?= (($data['user']['role'] ?? '') == 'admin') ? 'selected' : ''; ?>>Admin</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Status Akun</label>
+            <select class="form-control" id="status" name="status">
+                <option value="aktif">Aktif</option>
+                <option value="nonaktif">Nonaktif</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input 
+                class="form-control" 
+                id="password" 
+                name="password" 
+                type="password" 
+                placeholder="Masukkan password" 
+                required
+            >
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn-primary" type="submit">
+            <i class="fas fa-save"></i> Simpan
+        </button>
+
+        <a href="<?= BASEURL; ?>/admin/users" class="btn-primary ghost-light" style="text-decoration: none;">
+            <i class="fas fa-times"></i> Batal
+        </a>
+    </div>
+</form>
             </section>
         </main>
     </div>

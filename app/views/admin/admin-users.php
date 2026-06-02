@@ -139,8 +139,23 @@ foreach ($data['users'] as $u) {
                                     <td><?= date('d M Y', strtotime($user['created_at'])); ?></td>
                                     <td><span class="status-badge status-success">Aktif</span></td>
                                     <td>
-                                        <button class="btn-action warning" title="Edit" onclick="alert('Fitur edit user dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-pen"></i></button>
-                                        <button class="btn-action danger" title="Hapus" onclick="alert('Fitur hapus user dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-trash"></i></button>
+                                        <button 
+                                            type="button"
+                                            class="btn-icon edit" 
+                                            title="Edit User"
+                                            onclick="window.location.href='<?= BASEURL; ?>/admin/user_form/<?= $user['id']; ?>'"
+                                        >
+                                            <i class="fas fa-pen"></i>
+                                        </button>
+
+                                        <button 
+                                            type="button"
+                                            class="btn-icon delete" 
+                                            title="Hapus User"
+                                            onclick="if(confirm('Yakin ingin menghapus user ini?')) { window.location.href='<?= BASEURL; ?>/admin/hapus_user/<?= $user['id']; ?>'; }"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

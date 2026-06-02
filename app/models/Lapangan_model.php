@@ -195,5 +195,62 @@ class Lapangan_model {
                     ORDER BY k.nama_kategori ASC");
         return $this->db->resultSet();
     }
+
+    public function tambahKategori($nama_kategori, $icon)
+{
+    $this->db->query("INSERT INTO kategori_lapangan (nama_kategori, icon) 
+                      VALUES (:nama_kategori, :icon)");
+
+    $this->db->bind(':nama_kategori', $nama_kategori);
+    $this->db->bind(':icon', $icon);
+
+    $this->db->execute();
+
+    return $this->db->rowCount();
+}
+
+public function getKategoriById($id)
+{
+    $this->db->query("SELECT * FROM kategori_lapangan WHERE id = :id");
+    $this->db->bind(':id', $id);
+
+    return $this->db->single();
+}
+
+public function updateKategori($id, $nama_kategori, $icon)
+{
+    $this->db->query("UPDATE kategori_lapangan 
+                      SET nama_kategori = :nama_kategori,
+                          icon = :icon
+                      WHERE id = :id");
+
+    $this->db->bind(':nama_kategori', $nama_kategori);
+    $this->db->bind(':icon', $icon);
+    $this->db->bind(':id', $id);
+
+    $this->db->execute();
+
+    return $this->db->rowCount();
+}
+
+public function getTotalLapanganByKategori($id_kategori)
+{
+    $this->db->query("SELECT COUNT(*) AS total FROM lapangan WHERE id_kategori = :id_kategori");
+    $this->db->bind(':id_kategori', $id_kategori);
+
+    $result = $this->db->single();
+
+    return $result['total'] ?? 0;
+}
+
+public function hapusKategori($id)
+{
+    $this->db->query("DELETE FROM kategori_lapangan WHERE id = :id");
+    $this->db->bind(':id', $id);
+
+    $this->db->execute();
+
+    return $this->db->rowCount();
+}
 }
 

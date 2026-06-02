@@ -63,4 +63,67 @@ class User_model {
         $this->db->query("SELECT COUNT(*) as total FROM users");
         return $this->db->single()['total'];
     }
+
+public function tambahUser($data)
+{
+    $this->db->query("INSERT INTO users 
+        (nama, email, password, no_telp, role, foto) 
+        VALUES 
+        (:nama, :email, :password, :no_telp, :role, 'default.jpg')
+    ");
+
+    $this->db->bind(':nama', $data['nama']);
+    $this->db->bind(':email', $data['email']);
+    $this->db->bind(':password', password_hash($data['password'], PASSWORD_DEFAULT));
+    $this->db->bind(':no_telp', $data['no_telp']);
+    $this->db->bind(':role', $data['role']);
+
+    $this->db->execute();
+
+    return $this->db->rowCount();
+}
+
+public function updateUser($data)
+{
+    if (!empty($data['password'])) {
+        $this->db->query("UPDATE users 
+            SET nama = :nama,
+                email = :email,
+                no_telp = :no_telp,
+                role = :role,
+                password = :password
+            WHERE id = :id
+        ");
+
+        $this->db->bind(':password', password_hash($data['password'], PASSWORD_DEFAULT));
+    } else {
+        $this->db->query("UPDATE users 
+            SET nama = :nama,
+                email = :email,
+                no_telp = :no_telp,
+                role = :role
+            WHERE id = :id
+        ");
+    }
+
+    $this->db->bind(':nama', $data['nama']);
+    $this->db->bind(':email', $data['email']);
+    $this->db->bind(':no_telp', $data['no_telp']);
+    $this->db->bind(':role', $data['role']);
+    $this->db->bind(':id', $data['id']);
+
+    $this->db->execute();
+
+    return $this->db->rowCount();
+}
+
+public function hapusUser($id)
+{
+    $this->db->query("DELETE FROM users WHERE id = :id");
+    $this->db->bind(':id', $id);
+
+    $this->db->execute();
+
+    return $this->db->rowCount();
+}
 }

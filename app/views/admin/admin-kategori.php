@@ -40,10 +40,10 @@
                     <div class="table-header">
                         <h2 class="table-title"><i class="fas fa-plus-circle"></i> Tambah Kategori</h2>
                     </div>
-                    <form class="form-panel" id="form-kategori" action="#" method="post">
+                    <form class="form-panel" id="form-kategori" action="<?= BASEURL; ?>/admin/tambah_kategori" method="post">
                         <div class="form-group">
                             <label for="input-nama-kategori">Nama Kategori</label>
-                            <input class="form-control" id="input-nama-kategori" name="nama" type="text" placeholder="Contoh: Futsal, Badminton..." required>
+                            <input class="form-control" id="input-nama-kategori" name="nama_kategori" type="text" placeholder="Contoh: Futsal, Badminton..." required>
                         </div>
                         <div class="form-group">
                             <label for="input-icon-kategori">Icon (Font Awesome class)</label>
@@ -91,8 +91,25 @@
                                         <td><strong><i class="<?= htmlspecialchars($cat['icon']); ?>"></i> <?= htmlspecialchars($cat['nama_kategori']); ?></strong></td>
                                         <td><?= $cat['total_lapangan']; ?></td>
                                         <td>
-                                            <button class="btn-action" title="Edit" onclick="alert('Fitur edit kategori dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-pen"></i></button>
-                                            <button class="btn-action danger" title="Hapus" onclick="alert('Fitur hapus kategori dinonaktifkan demi keamanan demo platform.')"><i class="fas fa-trash"></i></button>
+                                           <div class="action-buttons">
+    <button 
+        type="button"
+        class="btn-icon edit" 
+        title="Edit Kategori"
+        onclick="window.location.href='<?= BASEURL; ?>/admin/edit_kategori/<?= $cat['id']; ?>'"
+    >
+        <i class="fas fa-pen"></i>
+    </button>
+
+    <button 
+        type="button"
+        class="btn-icon delete" 
+        title="Hapus Kategori"
+        onclick="if(confirm('Yakin ingin menghapus kategori ini?')) { window.location.href='<?= BASEURL; ?>/admin/hapus_kategori/<?= $cat['id']; ?>'; }"
+    >
+        <i class="fas fa-trash"></i>
+    </button>
+</div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
