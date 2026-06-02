@@ -122,6 +122,37 @@ class Pengelola extends Controller {
         }
     }
 
+    public function hapus_lapangan($id = null)
+    {
+        if ($id === null) {
+            header('Location: ' . BASEURL . '/pengelola/lapangan');
+            exit;
+        }
+
+        $id_pengelola = $_SESSION['user_id'];
+        $lapanganModel = $this->model('Lapangan_model');
+
+        try {
+            // Optional: Hapus foto dari folder jika tidak default
+            $lapangan = $lapanganModel->getLapanganById($id);
+            if ($lapangan && $lapangan['id_pengelola'] == $id_pengelola) {
+                if ($lapangan['foto_utama'] !== 'default_lapangan.jpg' && file_exists('public/assets/uploads/lapangan/' . $lapangan['foto_utama'])) {
+                    unlink('public/assets/uploads/lapangan/' . $lapangan['foto_utama']);
+                }
+                
+                $lapanganModel->deleteLapangan($id, $id_pengelola);
+                Flasher::setFlash('Data lapangan berhasil dihapus!', 'success');
+            } else {
+                Flasher::setFlash('Data lapangan tidak ditemukan atau akses ditolak.', 'warning');
+            }
+        } catch (PDOException $e) {
+            Flasher::setFlash('Gagal menghapus data lapangan: ' . $e->getMessage(), 'danger');
+        }
+
+        header('Location: ' . BASEURL . '/pengelola/lapangan');
+        exit;
+    }
+
     public function booking()
     {
         $data['judul'] = 'Data Booking';

@@ -1,8 +1,13 @@
 SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE review;
-TRUNCATE TABLE pembayaran;
-TRUNCATE TABLE booking;
-TRUNCATE TABLE lapangan;
+DELETE FROM review;
+DELETE FROM pembayaran;
+DELETE FROM booking;
+DELETE FROM lapangan;
+
+ALTER TABLE review AUTO_INCREMENT = 1;
+ALTER TABLE pembayaran AUTO_INCREMENT = 1;
+ALTER TABLE booking AUTO_INCREMENT = 1;
+ALTER TABLE lapangan AUTO_INCREMENT = 1;
 SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO `lapangan` (`id`, `id_pengelola`, `id_kategori`, `nama_lapangan`, `deskripsi`, `harga_per_jam`, `fasilitas`, `foto_utama`, `status`) VALUES

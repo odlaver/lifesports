@@ -51,8 +51,10 @@
                                     <td><?= htmlspecialchars($row['nama_kategori']); ?></td>
                                     <td>Rp <?= number_format($row['harga_per_jam'], 0, ',', '.'); ?>/jam</td>
                                     <td><?= $row['total_booking']; ?>x</td>
-                                    <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
-                                    <td><a href="<?= BASEURL; ?>/pengelola/lapangan_form/<?= $row['id']; ?>" class="btn-action"><i class="fas fa-pen"></i></a></td>
+                                    <td>
+                                        <a href="<?= BASEURL; ?>/pengelola/lapangan_form/<?= $row['id']; ?>" class="btn-action" title="Edit"><i class="fas fa-pen"></i></a>
+                                        <a href="<?= BASEURL; ?>/pengelola/hapus_lapangan/<?= $row['id']; ?>" class="btn-action" style="color: var(--status-danger); margin-left: 10px;" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus lapangan ini?');"><i class="fas fa-trash"></i></a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>

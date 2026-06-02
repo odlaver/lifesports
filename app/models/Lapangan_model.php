@@ -102,6 +102,7 @@ class Lapangan_model {
                     GROUP BY l.id, l.nama_lapangan 
                     ORDER BY COUNT(b.id) DESC 
                     LIMIT 1");
+        $this->db->bind(':id_pengelola', $id_pengelola);
         $res = $this->db->single();
         return $res ? $res['nama_lapangan'] : 'Tidak ada data';
     }
@@ -150,6 +151,14 @@ class Lapangan_model {
         $this->db->bind(':fasilitas', $fasilitas);
         $this->db->bind(':foto_utama', $foto_utama);
         $this->db->bind(':status', $status);
+        return $this->db->execute();
+    }
+
+    public function deleteLapangan($id, $id_pengelola)
+    {
+        $this->db->query("DELETE FROM lapangan WHERE id = :id AND id_pengelola = :id_pengelola");
+        $this->db->bind(':id', $id);
+        $this->db->bind(':id_pengelola', $id_pengelola);
         return $this->db->execute();
     }
 
