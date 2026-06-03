@@ -52,6 +52,21 @@ class User_model {
         return $this->db->execute();
     }
 
+    public function updateProfilePengelola($id, $nama, $email, $info_pembayaran, $password = null)
+    {
+        if ($password !== null) {
+            $this->db->query("UPDATE users SET nama = :nama, email = :email, info_pembayaran = :info_pembayaran, password = :password WHERE id = :id");
+            $this->db->bind(':password', $password);
+        } else {
+            $this->db->query("UPDATE users SET nama = :nama, email = :email, info_pembayaran = :info_pembayaran WHERE id = :id");
+        }
+        $this->db->bind(':id', $id);
+        $this->db->bind(':nama', $nama);
+        $this->db->bind(':email', $email);
+        $this->db->bind(':info_pembayaran', $info_pembayaran);
+        return $this->db->execute();
+    }
+
     public function getAllUsers()
     {
         $this->db->query("SELECT * FROM users ORDER BY role ASC, nama ASC");

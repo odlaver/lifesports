@@ -133,9 +133,21 @@ class Pengelola extends Controller {
         $lapanganModel = $this->model('Lapangan_model');
 
         try {
-            // Optional: Hapus foto dari folder jika tidak default
             $lapangan = $lapanganModel->getLapanganById($id);
             if ($lapangan && $lapangan['id_pengelola'] == $id_pengelola) {
+                // Check if lapangan has any bookings
+                $bookingModel = $this->model('Booking_model');
+                $this->db = new Database();
+                $this->db->query("SELECT COUNT(*) as total FROM booking WHERE id_lapangan = :id_lapangan");
+                $this->db->bind(':id_lapangan', $id);
+                $bookingCount = $this->db->single()['total'];
+
+                if ($bookingCount > 0) {
+                    Flasher::setFlash('Gagal: Lapangan tidak dapat dihapus permanen karena memiliki riwayat pemesanan. Silakan ubah statusnya menjadi Nonaktif melalui menu Edit.', 'warning');
+                    header('Location: ' . BASEURL . '/pengelola/lapangan');
+                    exit;
+                }
+
                 if ($lapangan['foto_utama'] !== 'default_lapangan.jpg' && file_exists('public/assets/uploads/lapangan/' . $lapangan['foto_utama'])) {
                     unlink('public/assets/uploads/lapangan/' . $lapangan['foto_utama']);
                 }
@@ -203,14 +215,19 @@ class Pengelola extends Controller {
             exit;
         }
 
-        $newStatus = 'pending';
-        if ($status === 'konfirmasi') {
-            $newStatus = 'dikonfirmasi';
-        } else if ($status === 'selesai') {
-            $newStatus = 'selesai';
-        } else if ($status === 'batal') {
-            $newStatus = 'dibatalkan';
+        $allowedStatuses = [
+            'konfirmasi' => 'dikonfirmasi', 
+            'selesai' => 'selesai', 
+            'batal' => 'dibatalkan'
+        ];
+        
+        if (!array_key_exists($status, $allowedStatuses)) {
+            Flasher::setFlash('Aksi tidak valid!', 'danger');
+            header('Location: ' . BASEURL . '/pengelola/booking');
+            exit;
         }
+        
+        $newStatus = $allowedStatuses[$status];
 
         try {
             $bookingModel->updateStatus($id, $newStatus);
@@ -254,5 +271,63 @@ class Pengelola extends Controller {
         $data['monthly'] = $bookingModel->getMonthlyReportByPengelola($id_pengelola);
 
         $this->view('pengelola/pengelola-laporan', $data);
+    }
+
+    public function profile()
+    {
+        $data['judul'] = 'Profil & Pengaturan Pembayaran';
+        $userModel = $this->model('User_model');
+        $data['user'] = $userModel->getUserById($_SESSION['user_id']);
+
+        $this->view('pengelola/pengelola-profile', $data);
+    }
+
+    public function proses_profile()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nama = htmlspecialchars(trim($_POST['nama']));
+            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+            $info_pembayaran = htmlspecialchars(trim($_POST['info_pembayaran']));
+            $password = $_POST['password'];
+
+            if (empty($nama) || empty($email) || empty($info_pembayaran)) {
+                Flasher::setFlash('Nama, email, dan info pembayaran wajib diisi!', 'warning');
+                header('Location: ' . BASEURL . '/pengelola/profile');
+                exit;
+            }
+
+            $id_pengelola = $_SESSION['user_id'];
+            $userModel = $this->model('User_model');
+
+            $existing = $userModel->checkEmailExists($email);
+            if ($existing && $existing['id'] != $id_pengelola) {
+                Flasher::setFlash('Email sudah digunakan oleh orang lain!', 'warning');
+                header('Location: ' . BASEURL . '/pengelola/profile');
+                exit;
+            }
+
+            $hashed = null;
+            if (!empty($password)) {
+                $hashed = password_hash($password, PASSWORD_BCRYPT);
+            }
+
+            try {
+                $userModel->updateProfilePengelola($id_pengelola, $nama, $email, $info_pembayaran, $hashed);
+                
+                $_SESSION['nama'] = $nama;
+                $_SESSION['email'] = $email;
+
+                Flasher::setFlash('Profil dan Pengaturan Pembayaran berhasil diperbarui!', 'success');
+                header('Location: ' . BASEURL . '/pengelola/profile');
+                exit;
+            } catch (PDOException $e) {
+                Flasher::setFlash('Gagal memperbarui profil: ' . $e->getMessage(), 'warning');
+                header('Location: ' . BASEURL . '/pengelola/profile');
+                exit;
+            }
+        } else {
+            header('Location: ' . BASEURL . '/pengelola/profile');
+            exit;
+        }
     }
 }

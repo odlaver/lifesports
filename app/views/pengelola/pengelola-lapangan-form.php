@@ -16,6 +16,7 @@
                 <li><a href="<?= BASEURL; ?>/pengelola/lapangan" class="active"><i class="fas fa-building"></i> Lapangan Saya</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/booking"><i class="fas fa-calendar-check"></i> Booking Masuk</a></li>
                 <li><a href="<?= BASEURL; ?>/pengelola/laporan"><i class="fas fa-file-invoice"></i> Laporan</a></li>
+                <li><a href="<?= BASEURL; ?>/pengelola/profile"><i class="fas fa-user-cog"></i> Profil & Pembayaran</a></li>
                 <li><a href="<?= BASEURL; ?>/auth/logout" class="nav-danger"><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
             </ul>
         </aside>
