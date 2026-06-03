@@ -64,6 +64,51 @@ class Lapangan_model {
         return $this->db->resultSet();
     }
 
+    public function searchLapanganPengelola($id_pengelola, $keyword = '', $status = '', $kategori = '')
+    {
+        $query = "SELECT l.*, k.nama_kategori, 
+                  (SELECT COUNT(id) FROM booking WHERE id_lapangan = l.id) as total_booking
+                  FROM lapangan l
+                  JOIN kategori_lapangan k ON l.id_kategori = k.id
+                  WHERE l.id_pengelola = :id_pengelola";
+                  
+        if (!empty($keyword)) {
+            $query .= " AND l.nama_lapangan LIKE :keyword";
+        }
+        
+        if (!empty($status) && $status !== 'Semua Status') {
+            if ($status === 'Tersedia') $status_val = 'aktif';
+            elseif ($status === 'Maintenance') $status_val = 'maintenance';
+            elseif ($status === 'Nonaktif') $status_val = 'nonaktif';
+            else $status_val = '';
+            
+            if ($status_val) {
+                $query .= " AND l.status = :status";
+            }
+        }
+        
+        if (!empty($kategori) && $kategori !== 'Semua Kategori') {
+            $query .= " AND k.nama_kategori = :kategori";
+        }
+        
+        $query .= " ORDER BY l.id DESC";
+
+        $this->db->query($query);
+        $this->db->bind(':id_pengelola', $id_pengelola);
+
+        if (!empty($keyword)) {
+            $this->db->bind(':keyword', '%' . $keyword . '%');
+        }
+        if (!empty($status) && $status !== 'Semua Status' && !empty($status_val)) {
+            $this->db->bind(':status', $status_val);
+        }
+        if (!empty($kategori) && $kategori !== 'Semua Kategori') {
+            $this->db->bind(':kategori', $kategori);
+        }
+
+        return $this->db->resultSet();
+    }
+
     public function getLapanganById($id)
     {
         $this->db->query("SELECT l.*, k.nama_kategori 

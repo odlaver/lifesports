@@ -56,7 +56,7 @@
                     </div>
                     <div class="filter-group">
                         <label class="form-label" for="sport">Cabang Olahraga</label>
-                        <select id="sport" name="sport" class="form-control">
+                        <select id="sport" name="sport" class="form-control" onchange="this.form.submit()">
                             <option <?= $data['filter']['sport'] == 'Semua Cabang' || empty($data['filter']['sport']) ? 'selected' : ''; ?>>Semua Cabang</option>
                             <?php foreach ($data['kategori'] as $k): ?>
                                 <option <?= $data['filter']['sport'] == $k['nama_kategori'] ? 'selected' : ''; ?>><?= htmlspecialchars($k['nama_kategori']); ?></option>
@@ -65,11 +65,11 @@
                     </div>
                     <div class="filter-group">
                         <label class="form-label" for="date">Tanggal Main</label>
-                        <input type="date" id="date" name="date" class="form-control" value="<?= htmlspecialchars($data['filter']['date']); ?>">
+                        <input type="date" id="date" name="date" class="form-control" value="<?= htmlspecialchars($data['filter']['date']); ?>" onchange="this.form.submit()">
                     </div>
                     <div class="filter-group">
                         <label class="form-label" for="location">Lokasi</label>
-                        <select id="location" name="location" class="form-control">
+                        <select id="location" name="location" class="form-control" onchange="this.form.submit()">
                             <option <?= $data['filter']['location'] == 'Semua Lokasi' || empty($data['filter']['location']) ? 'selected' : ''; ?>>Semua Lokasi</option>
                             <option <?= $data['filter']['location'] == 'Kedaton' ? 'selected' : ''; ?>>Kedaton</option>
                             <option <?= $data['filter']['location'] == 'Sukarame' ? 'selected' : ''; ?>>Sukarame</option>
