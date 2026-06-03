@@ -64,7 +64,7 @@ class Pelanggan extends Controller {
 
         $this->view('pelanggan/pelanggan-detail-lapangan', $data);
     }
-    
+
     public function detail_lapangan($id = null)
     {
         $this->pelanggan_detail_lapangan($id);
@@ -85,6 +85,27 @@ class Pelanggan extends Controller {
                 exit;
             }
 
+            if ($durasi <= 0 || $durasi > 12) {
+                Flasher::setFlash('Durasi booking tidak valid (Maksimal 12 jam)!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/pelanggan_detail_lapangan/' . $id_lapangan);
+                exit;
+            }
+
+            $today = date('Y-m-d');
+            $now_time = date('H:i');
+
+            if ($tanggal_main < $today) {
+                Flasher::setFlash('Tidak dapat memesan untuk tanggal yang sudah lewat!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/pelanggan_detail_lapangan/' . $id_lapangan);
+                exit;
+            }
+
+            if ($tanggal_main === $today && $jam_mulai <= $now_time) {
+                Flasher::setFlash('Jam mulai sudah lewat untuk hari ini!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/pelanggan_detail_lapangan/' . $id_lapangan);
+                exit;
+            }
+
             $lapanganModel = $this->model('Lapangan_model');
             $bookingModel = $this->model('Booking_model');
 
@@ -99,6 +120,14 @@ class Pelanggan extends Controller {
             $start_time = strtotime($jam_mulai);
             $end_time = $start_time + ($durasi * 3600);
             $jam_selesai = date('H:i:s', $end_time);
+
+
+            $is_booked = $bookingModel->checkAvailability($id_lapangan, $tanggal_main, $jam_mulai, $jam_selesai);
+            if ($is_booked) {
+                Flasher::setFlash('Jadwal pada tanggal dan jam tersebut sudah terisi, silakan pilih waktu lain!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/pelanggan_detail_lapangan/' . $id_lapangan);
+                exit;
+            }
 
             $total_harga = $lapangan['harga_per_jam'] * $durasi;
             $kode_booking = 'BKG' . date('Ymd') . rand(1000, 9999);
@@ -127,7 +156,7 @@ class Pelanggan extends Controller {
             header('Location: ' . BASEURL . '/pelanggan/booking');
             exit;
         }
-        
+
         $data['judul'] = 'Pembayaran';
         $bookingModel = $this->model('Booking_model');
         $data['booking'] = $bookingModel->getBookingById($id, $_SESSION['user_id']);
@@ -135,6 +164,18 @@ class Pelanggan extends Controller {
         if (empty($data['booking'])) {
             Flasher::setFlash('Pesanan tidak ditemukan!', 'warning');
             header('Location: ' . BASEURL . '/pelanggan/booking');
+            exit;
+        }
+
+        if ($data['booking']['status'] !== 'pending') {
+            Flasher::setFlash('Pesanan ini sudah tidak bisa melakukan proses pembayaran baru!', 'warning');
+            header('Location: ' . BASEURL . '/pelanggan/booking_detail/' . $id);
+            exit;
+        }
+
+        if (empty($data['booking']['info_pembayaran'])) {
+            Flasher::setFlash('Metode pembayaran belum diatur oleh Pengelola. Silakan hubungi Pengelola terkait atau batalkan pesanan.', 'warning');
+            header('Location: ' . BASEURL . '/pelanggan/booking_detail/' . $id);
             exit;
         }
 
@@ -164,19 +205,31 @@ class Pelanggan extends Controller {
                 exit;
             }
 
+            if ($booking['status'] !== 'pending') {
+                Flasher::setFlash('Pesanan ini sudah tidak bisa menerima pembayaran baru!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/booking_detail/' . $id_booking);
+                exit;
+            }
+
+            if (empty($booking['info_pembayaran'])) {
+                Flasher::setFlash('Metode pembayaran belum diatur oleh Pengelola!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/booking_detail/' . $id_booking);
+                exit;
+            }
+
             $bukti_transfer = '';
             if (isset($_FILES['bukti_transfer']) && $_FILES['bukti_transfer']['error'] === 0) {
                 $ext = pathinfo($_FILES['bukti_transfer']['name'], PATHINFO_EXTENSION);
                 $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
-                
+
                 if (in_array(strtolower($ext), $allowed)) {
                     $bukti_transfer = 'PAY_' . $id_booking . '_' . time() . '.' . $ext;
                     $target_dir = 'public/assets/uploads/pembayaran/';
-                    
+
                     if (!is_dir($target_dir)) {
                         mkdir($target_dir, 0777, true);
                     }
-                    
+
                     if (!move_uploaded_file($_FILES['bukti_transfer']['tmp_name'], $target_dir . $bukti_transfer)) {
                         Flasher::setFlash('Gagal mengunggah bukti transfer!', 'warning');
                         header('Location: ' . BASEURL . '/pelanggan/pembayaran/' . $id_booking);
@@ -262,6 +315,13 @@ class Pelanggan extends Controller {
             exit;
         }
 
+        $reviewModel = $this->model('Review_model');
+        if ($reviewModel->checkReviewExists($id)) {
+            Flasher::setFlash('Anda sudah memberikan review untuk pemesanan ini!', 'warning');
+            header('Location: ' . BASEURL . '/pelanggan/booking_detail/' . $id);
+            exit;
+        }
+
         $this->view('pelanggan/review', $data);
     }
 
@@ -278,7 +338,23 @@ class Pelanggan extends Controller {
                 exit;
             }
 
+            $bookingModel = $this->model('Booking_model');
             $reviewModel = $this->model('Review_model');
+
+
+            $booking = $bookingModel->getBookingByIdForReview($id_booking, $_SESSION['user_id']);
+            if (empty($booking)) {
+                Flasher::setFlash('Anda tidak memiliki izin atau pemesanan belum selesai!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/booking');
+                exit;
+            }
+
+
+            if ($reviewModel->checkReviewExists($id_booking)) {
+                Flasher::setFlash('Anda sudah memberikan review untuk pemesanan ini!', 'warning');
+                header('Location: ' . BASEURL . '/pelanggan/booking_detail/' . $id_booking);
+                exit;
+            }
 
             try {
                 $reviewModel->insertReview($id_booking, $rating, $ulasan);
@@ -335,7 +411,7 @@ class Pelanggan extends Controller {
 
             try {
                 $userModel->updateProfile($id_pelanggan, $nama, $email, $hashed);
-                
+
                 $_SESSION['nama'] = $nama;
                 $_SESSION['email'] = $email;
 

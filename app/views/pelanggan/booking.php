@@ -105,11 +105,11 @@
                                     <td>Rp <?= number_format($row['total_harga'], 0, ',', '.'); ?></td>
                                     <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
                                     <td>
-                                        <a href="<?= BASEURL; ?>/pelanggan/booking_detail/<?= $row['id']; ?>" class="btn-action"><i class="fas fa-eye"></i> Detail</a>
+                                        <a href="<?= BASEURL; ?>/pelanggan/booking_detail/<?= $row['id']; ?>" class="btn-action" style="width: auto; padding: 0 12px; text-decoration: none;"><i class="fas fa-eye"></i> Detail</a>
                                         <?php if ($row['status'] === 'selesai'): ?>
-                                            <a href="<?= BASEURL; ?>/pelanggan/review/<?= $row['id']; ?>" class="btn-action warning" style="margin-left: 5px;"><i class="fas fa-star"></i> Review</a>
+                                            <a href="<?= BASEURL; ?>/pelanggan/review/<?= $row['id']; ?>" class="btn-action warning" style="width: auto; padding: 0 12px; margin-left: 5px; text-decoration: none;"><i class="fas fa-star"></i> Review</a>
                                         <?php elseif ($row['status'] === 'pending'): ?>
-                                            <a href="<?= BASEURL; ?>/pelanggan/pembayaran/<?= $row['id']; ?>" class="btn-action success" style="margin-left: 5px; background: rgba(46,139,87,0.1); color: var(--status-success); border: 1px solid rgba(46,139,87,0.3);"><i class="fas fa-wallet"></i> Bayar</a>
+                                            <a href="<?= BASEURL; ?>/pelanggan/pembayaran/<?= $row['id']; ?>" class="btn-action success" style="width: auto; padding: 0 12px; margin-left: 5px; background: rgba(46,139,87,0.1); color: var(--status-success); border: 1px solid rgba(46,139,87,0.3); text-decoration: none;"><i class="fas fa-wallet"></i> Bayar</a>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
