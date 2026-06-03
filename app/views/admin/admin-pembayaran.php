@@ -39,29 +39,29 @@
                     <div class="dash-card-icon"><i class="fas fa-wallet"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Pendapatan</h3>
-                        <div class="value value-compact">Rp 64M</div>
-                        <small>Bulan ini</small>
+                        <div class="value value-compact">Rp <?= number_format($data['total_revenue'], 0, ',', '.'); ?></div>
+                        <small>Dari Semua Transaksi Lunas</small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-check-circle"></i></div>
                     <div class="dash-card-info">
                         <h3>Lunas</h3>
-                        <div class="value">410</div>
+                        <div class="value"><?= $data['payment_stats']['valid']['count'] ?? 0; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon warning"><i class="fas fa-clock"></i></div>
                     <div class="dash-card-info">
                         <h3>Pending</h3>
-                        <div class="value value-warning">30</div>
+                        <div class="value value-warning"><?= $data['payment_stats']['menunggu']['count'] ?? 0; ?></div>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-times-circle"></i></div>
                     <div class="dash-card-info">
                         <h3>Gagal</h3>
-                        <div class="value">10</div>
+                        <div class="value"><?= $data['payment_stats']['tidak_valid']['count'] ?? 0; ?></div>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>No. Transaksi</th>
+                            <th>ID Transaksi</th>
                             <th>Kode Booking</th>
                             <th>Pelanggan</th>
                             <th>Metode</th>
@@ -100,42 +100,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>TRX-202604250022</strong></td>
-                            <td>BKG2026042812345</td>
-                            <td>Andi Saputra</td>
-                            <td>VA BCA</td>
-                            <td>Rp 700.000</td>
-                            <td>25 Apr 2026</td>
-                            <td><span class="status-badge status-success">Lunas</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>TRX-202604290014</strong></td>
-                            <td>BKG2026042898765</td>
-                            <td>Budi Santoso</td>
-                            <td>GoPay</td>
-                            <td>Rp 300.000</td>
-                            <td>29 Apr 2026</td>
-                            <td><span class="status-badge status-warning">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>TRX-202604290031</strong></td>
-                            <td>BKG2026042854321</td>
-                            <td>Citra Lestari</td>
-                            <td>VA Mandiri</td>
-                            <td>Rp 200.000</td>
-                            <td>29 Apr 2026</td>
-                            <td><span class="status-badge status-success">Lunas</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>TRX-202604300018</strong></td>
-                            <td>BKG2026042867890</td>
-                            <td>Deni Ramdani</td>
-                            <td>Kartu Kredit</td>
-                            <td>Rp 700.000</td>
-                            <td>30 Apr 2026</td>
-                            <td><span class="status-badge status-danger">Gagal</span></td>
-                        </tr>
+                        <?php if (empty($data['pembayaran'])): ?>
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Belum ada riwayat pembayaran.</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($data['pembayaran'] as $row): 
+                                $status_class = 'status-warning';
+                                $status_label = 'Pending';
+                                if ($row['status_pembayaran'] === 'valid') {
+                                    $status_class = 'status-success';
+                                    $status_label = 'Lunas';
+                                } elseif ($row['status_pembayaran'] === 'tidak_valid') {
+                                    $status_class = 'status-danger';
+                                    $status_label = 'Gagal';
+                                }
+                            ?>
+                                <tr>
+                                    <td><strong>PAY-<?= str_pad($row['id'], 5, '0', STR_PAD_LEFT); ?></strong></td>
+                                    <td><?= htmlspecialchars($row['kode_booking']); ?></td>
+                                    <td><?= htmlspecialchars($row['nama_pelanggan']); ?></td>
+                                    <td><?= htmlspecialchars($row['metode_pembayaran']); ?></td>
+                                    <td>Rp <?= number_format($row['total_harga'], 0, ',', '.'); ?></td>
+                                    <td><?= date('d M Y H:i', strtotime($row['waktu_pembayaran'])); ?></td>
+                                    <td><span class="status-badge <?= $status_class; ?>"><?= $status_label; ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </section>

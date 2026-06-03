@@ -88,7 +88,8 @@ class Admin extends Controller {
 
         $userModel = $this->model('User_model');
 
-        if ($userModel->checkEmailExists($email, $id)) {
+        $existingUser = $userModel->checkEmailExists($email);
+        if ($existingUser && $existingUser['id'] != $id) {
             Flasher::setFlash('Email sudah digunakan oleh user lain!', 'warning');
             header('Location: ' . BASEURL . '/admin/user_form' . ($id ? '/' . $id : ''));
             exit;
@@ -104,6 +105,17 @@ class Admin extends Controller {
         ];
 
         if ($id) {
+            $oldUser = $userModel->getUserById($id);
+            if ($oldUser && $oldUser['role'] === 'pengelola' && $role !== 'pengelola') {
+                $lapanganModel = $this->model('Lapangan_model');
+                $totalLapangan = $lapanganModel->countLapanganByPengelola($id);
+                if ($totalLapangan > 0) {
+                    Flasher::setFlash('Role Pengelola tidak dapat diubah karena pengguna ini masih memiliki data Lapangan!', 'warning');
+                    header('Location: ' . BASEURL . '/admin/user_form/' . $id);
+                    exit;
+                }
+            }
+
             if ($userModel->updateUser($data) >= 0) {
                 Flasher::setFlash('User berhasil diperbarui!', 'success');
                 header('Location: ' . BASEURL . '/admin/users');
@@ -333,12 +345,37 @@ public function hapus_kategori($id)
     public function pembayaran()
     {
         $data['judul'] = 'Data Pembayaran';
+        $pembayaranModel = $this->model('Pembayaran_model');
+        $data['pembayaran'] = $pembayaranModel->getAllPembayaranAdmin();
+        $data['payment_stats'] = $pembayaranModel->getPaymentStatsAdmin();
+        $data['total_revenue'] = $this->model('Booking_model')->totalAllRevenue();
         $this->view('admin/admin-pembayaran', $data);
     }
 
     public function laporan()
     {
         $data['judul'] = 'Laporan';
+        
+        $bookingModel = $this->model('Booking_model');
+        $pembayaranModel = $this->model('Pembayaran_model');
+        $userModel = $this->model('User_model');
+        $lapanganModel = $this->model('Lapangan_model');
+        
+        $data['total_revenue'] = $bookingModel->totalAllRevenue();
+        $data['total_booking'] = $bookingModel->countAllBookings();
+        
+        $stats = $bookingModel->getBookingStatsAdmin();
+        $data['selesai_booking'] = $stats['selesai']['count'] ?? 0;
+        
+        $data['total_user'] = $userModel->countUsers();
+        $data['total_lapangan'] = $lapanganModel->countLapangan();
+        
+        $data['top_lapangan'] = $bookingModel->getTopLapanganAdmin();
+        $data['top_pengelola'] = $bookingModel->getTopPengelolaAdmin();
+        
+        $data['booking_stats'] = $bookingModel->getBookingStatsAdmin();
+        $data['payment_stats'] = $pembayaranModel->getPaymentStatsAdmin();
+
         $this->view('admin/admin-laporan', $data);
     }
 }

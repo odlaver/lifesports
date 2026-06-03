@@ -49,32 +49,32 @@
                     <div class="dash-card-icon"><i class="fas fa-wallet"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Pendapatan</h3>
-                        <div class="value value-compact">Rp 64M</div>
-                        <small>Bulan ini</small>
+                        <div class="value value-compact">Rp <?= number_format($data['total_revenue'], 0, ',', '.'); ?></div>
+                        <small>Seluruh Waktu</small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-calendar-check"></i></div>
                     <div class="dash-card-info">
                         <h3>Total Booking</h3>
-                        <div class="value">450</div>
-                        <small>Selesai: 280</small>
+                        <div class="value"><?= $data['total_booking']; ?></div>
+                        <small>Selesai: <?= $data['selesai_booking']; ?></small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-users"></i></div>
                     <div class="dash-card-info">
-                        <h3>User Baru</h3>
-                        <div class="value">18</div>
-                        <small>Bulan ini</small>
+                        <h3>Total User</h3>
+                        <div class="value"><?= $data['total_user']; ?></div>
+                        <small>Termasuk Pengelola</small>
                     </div>
                 </div>
                 <div class="dash-card">
                     <div class="dash-card-icon"><i class="fas fa-building"></i></div>
                     <div class="dash-card-info">
-                        <h3>Lapangan Aktif</h3>
-                        <div class="value">14</div>
-                        <small>Dari 18 total</small>
+                        <h3>Total Lapangan</h3>
+                        <div class="value"><?= $data['total_lapangan']; ?></div>
+                        <small>Telah Terdaftar</small>
                     </div>
                 </div>
             </div>
@@ -95,24 +95,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><strong>Inter Futsal Kedaton</strong><br><small>Futsal</small></td>
-                                <td>Bpk. Sudirman</td>
-                                <td>42x</td>
-                                <td>Rp 12.600.000</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Kemiling Tennis Club</strong><br><small>Tennis</small></td>
-                                <td>Bpk. Sudirman</td>
-                                <td>38x</td>
-                                <td>Rp 7.600.000</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Sukarame Badminton Hall</strong><br><small>Badminton</small></td>
-                                <td>Bpk. Sudirman</td>
-                                <td>31x</td>
-                                <td>Rp 4.960.000</td>
-                            </tr>
+                            <?php if (empty($data['top_lapangan'])): ?>
+                                <tr><td colspan="4" style="text-align: center;">Data tidak tersedia</td></tr>
+                            <?php else: ?>
+                                <?php foreach ($data['top_lapangan'] as $lap): ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($lap['nama_lapangan']); ?></strong><br><small><?= htmlspecialchars($lap['nama_kategori']); ?></small></td>
+                                    <td><?= htmlspecialchars($lap['nama_pengelola']); ?></td>
+                                    <td><?= $lap['total_booking']; ?>x</td>
+                                    <td>Rp <?= number_format($lap['pendapatan'], 0, ',', '.'); ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </section>
@@ -131,18 +125,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><strong>Bpk. Sudirman</strong></td>
-                                <td>3</td>
-                                <td>111x</td>
-                                <td>Rp 23.500.000</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Ibu Ratna</strong></td>
-                                <td>2</td>
-                                <td>68x</td>
-                                <td>Rp 17.000.000</td>
-                            </tr>
+                            <?php if (empty($data['top_pengelola'])): ?>
+                                <tr><td colspan="4" style="text-align: center;">Data tidak tersedia</td></tr>
+                            <?php else: ?>
+                                <?php foreach ($data['top_pengelola'] as $peng): ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($peng['nama_pengelola']); ?></strong></td>
+                                    <td><?= $peng['jumlah_lapangan']; ?></td>
+                                    <td><?= $peng['total_booking']; ?>x</td>
+                                    <td>Rp <?= number_format($peng['pendapatan'], 0, ',', '.'); ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </section>
@@ -157,23 +151,23 @@
                         <tbody>
                             <tr>
                                 <td><span class="status-badge status-warning">Pending</span></td>
-                                <td>45 booking</td>
-                                <td class="text-right">Rp 4.500.000</td>
+                                <td><?= $data['booking_stats']['pending']['count'] ?? 0; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['pending']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-info">Confirmed</span></td>
-                                <td>120 booking</td>
-                                <td class="text-right">Rp 18.000.000</td>
+                                <td><?= $data['booking_stats']['dikonfirmasi']['count'] ?? 0; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['dikonfirmasi']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-success">Selesai</span></td>
-                                <td>280 booking</td>
-                                <td class="text-right">Rp 45.000.000</td>
+                                <td><?= $data['booking_stats']['selesai']['count'] ?? 0; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['selesai']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-danger">Dibatalkan</span></td>
-                                <td>5 booking</td>
-                                <td class="text-right">Rp 500.000</td>
+                                <td><?= $data['booking_stats']['dibatalkan']['count'] ?? 0; ?> booking</td>
+                                <td class="text-right">Rp <?= number_format($data['booking_stats']['dibatalkan']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -187,18 +181,18 @@
                         <tbody>
                             <tr>
                                 <td><span class="status-badge status-success">Lunas</span></td>
-                                <td>410 transaksi</td>
-                                <td class="text-right">Rp 64.000.000</td>
+                                <td><?= $data['payment_stats']['valid']['count'] ?? 0; ?> transaksi</td>
+                                <td class="text-right">Rp <?= number_format($data['payment_stats']['valid']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-warning">Pending</span></td>
-                                <td>30 transaksi</td>
-                                <td class="text-right">Rp 3.000.000</td>
+                                <td><?= $data['payment_stats']['menunggu']['count'] ?? 0; ?> transaksi</td>
+                                <td class="text-right">Rp <?= number_format($data['payment_stats']['menunggu']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-danger">Gagal</span></td>
-                                <td>10 transaksi</td>
-                                <td class="text-right">Rp 1.000.000</td>
+                                <td><?= $data['payment_stats']['tidak_valid']['count'] ?? 0; ?> transaksi</td>
+                                <td class="text-right">Rp <?= number_format($data['payment_stats']['tidak_valid']['total'] ?? 0, 0, ',', '.'); ?></td>
                             </tr>
                         </tbody>
                     </table>
