@@ -11,11 +11,11 @@ class Booking_model {
 
     private function autoUpdateStatuses()
     {
-        // Cancel pending bookings older than 2 hours
+
         $this->db->query("UPDATE booking SET status = 'dibatalkan' WHERE status = 'pending' AND created_at <= DATE_SUB(NOW(), INTERVAL 2 HOUR)");
         $this->db->execute();
 
-        // Auto-complete confirmed bookings that have passed their game time
+
         $this->db->query("UPDATE booking SET status = 'selesai' WHERE status = 'dikonfirmasi' AND CONCAT(tanggal_main, ' ', jam_selesai) <= NOW()");
         $this->db->execute();
     }
@@ -51,11 +51,11 @@ class Booking_model {
 
     public function getActiveBookingsByPelanggan($id_pelanggan)
     {
-        $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori 
+        $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori
                     FROM booking b
                     JOIN lapangan l ON b.id_lapangan = l.id
                     JOIN kategori_lapangan k ON l.id_kategori = k.id
-                    WHERE b.id_pelanggan = :id_pelanggan 
+                    WHERE b.id_pelanggan = :id_pelanggan
                     AND b.status IN ('pending', 'dibayar', 'dikonfirmasi')
                     ORDER BY b.tanggal_main ASC, b.jam_mulai ASC");
         $this->db->bind(':id_pelanggan', $id_pelanggan);
@@ -64,11 +64,11 @@ class Booking_model {
 
     public function getRecentBookingsByPelanggan($id_pelanggan)
     {
-        $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori 
+        $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori
                     FROM booking b
                     JOIN lapangan l ON b.id_lapangan = l.id
                     JOIN kategori_lapangan k ON l.id_kategori = k.id
-                    WHERE b.id_pelanggan = :id_pelanggan 
+                    WHERE b.id_pelanggan = :id_pelanggan
                     ORDER BY b.created_at DESC
                     LIMIT 5");
         $this->db->bind(':id_pelanggan', $id_pelanggan);
@@ -82,7 +82,7 @@ class Booking_model {
                     JOIN lapangan l ON b.id_lapangan = l.id
                     JOIN kategori_lapangan k ON l.id_kategori = k.id
                     LEFT JOIN pembayaran p ON p.id_booking = b.id
-                    WHERE b.id_pelanggan = :id_pelanggan 
+                    WHERE b.id_pelanggan = :id_pelanggan
                     ORDER BY b.created_at DESC");
         $this->db->bind(':id_pelanggan', $id_pelanggan);
         return $this->db->resultSet();
@@ -91,18 +91,18 @@ class Booking_model {
     public function getBookingById($id, $id_pelanggan = null)
     {
         if ($id_pelanggan !== null) {
-            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori, u.info_pembayaran 
-                        FROM booking b 
-                        JOIN lapangan l ON b.id_lapangan = l.id 
-                        JOIN kategori_lapangan k ON l.id_kategori = k.id 
+            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori, u.info_pembayaran
+                        FROM booking b
+                        JOIN lapangan l ON b.id_lapangan = l.id
+                        JOIN kategori_lapangan k ON l.id_kategori = k.id
                         JOIN users u ON l.id_pengelola = u.id
                         WHERE b.id = :id AND b.id_pelanggan = :id_pelanggan");
             $this->db->bind(':id_pelanggan', $id_pelanggan);
         } else {
-            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori, u.info_pembayaran 
-                        FROM booking b 
-                        JOIN lapangan l ON b.id_lapangan = l.id 
-                        JOIN kategori_lapangan k ON l.id_kategori = k.id 
+            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori, u.info_pembayaran
+                        FROM booking b
+                        JOIN lapangan l ON b.id_lapangan = l.id
+                        JOIN kategori_lapangan k ON l.id_kategori = k.id
                         JOIN users u ON l.id_pengelola = u.id
                         WHERE b.id = :id");
         }
@@ -124,10 +124,10 @@ class Booking_model {
 
     public function checkAvailability($id_lapangan, $tanggal_main, $jam_mulai, $jam_selesai)
     {
-        // Check if there is any overlapping booking (pending, dibayar, dikonfirmasi, selesai)
-        $this->db->query("SELECT COUNT(*) as total FROM booking 
-                          WHERE id_lapangan = :id_lapangan 
-                          AND tanggal_main = :tanggal_main 
+
+        $this->db->query("SELECT COUNT(*) as total FROM booking
+                          WHERE id_lapangan = :id_lapangan
+                          AND tanggal_main = :tanggal_main
                           AND status IN ('pending', 'dibayar', 'dikonfirmasi', 'selesai')
                           AND (
                               (jam_mulai < :jam_selesai AND jam_selesai > :jam_mulai)
@@ -141,7 +141,7 @@ class Booking_model {
 
     public function insertBooking($kode_booking, $id_pelanggan, $id_lapangan, $tanggal_main, $jam_mulai, $jam_selesai, $total_harga)
     {
-        $this->db->query("INSERT INTO booking (kode_booking, id_pelanggan, id_lapangan, tanggal_main, jam_mulai, jam_selesai, total_harga, status) 
+        $this->db->query("INSERT INTO booking (kode_booking, id_pelanggan, id_lapangan, tanggal_main, jam_mulai, jam_selesai, total_harga, status)
                     VALUES (:kode_booking, :id_pelanggan, :id_lapangan, :tanggal_main, :jam_mulai, :jam_selesai, :total_harga, 'pending')");
         $this->db->bind(':kode_booking', $kode_booking);
         $this->db->bind(':id_pelanggan', $id_pelanggan);

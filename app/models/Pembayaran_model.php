@@ -17,7 +17,7 @@ class Pembayaran_model {
 
     public function insertPembayaran($id_booking, $metode_pembayaran, $bukti_transfer)
     {
-        $this->db->query("INSERT INTO pembayaran (id_booking, metode_pembayaran, bukti_transfer, status_pembayaran, waktu_pembayaran) 
+        $this->db->query("INSERT INTO pembayaran (id_booking, metode_pembayaran, bukti_transfer, status_pembayaran, waktu_pembayaran)
                     VALUES (:id_booking, :metode_pembayaran, :bukti_transfer, 'menunggu', NOW())");
         $this->db->bind(':id_booking', $id_booking);
         $this->db->bind(':metode_pembayaran', $metode_pembayaran);
@@ -46,14 +46,24 @@ class Pembayaran_model {
         return $this->db->execute();
     }
 
+    public function getAllPembayaranAdmin()
+    {
+        $this->db->query("SELECT p.*, b.kode_booking, b.total_harga, u.nama as nama_pelanggan, b.id as booking_id
+                    FROM pembayaran p
+                    JOIN booking b ON p.id_booking = b.id
+                    JOIN users u ON b.id_pelanggan = u.id
+                    ORDER BY p.waktu_pembayaran DESC");
+        return $this->db->resultSet();
+    }
+
     public function getPaymentStatsAdmin()
     {
         $pay_statuses = ['menunggu', 'valid', 'tidak_valid'];
         $stats = [];
         foreach ($pay_statuses as $pst) {
-            $this->db->query("SELECT COUNT(*) as count, COALESCE(SUM(b.total_harga), 0) as total 
-                        FROM pembayaran p 
-                        JOIN booking b ON p.id_booking = b.id 
+            $this->db->query("SELECT COUNT(*) as count, COALESCE(SUM(b.total_harga), 0) as total
+                        FROM pembayaran p
+                        JOIN booking b ON p.id_booking = b.id
                         WHERE p.status_pembayaran = :status");
             $this->db->bind(':status', $pst);
             $stats[$pst] = $this->db->single();
