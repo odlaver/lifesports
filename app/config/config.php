@@ -2,7 +2,8 @@
 
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'];
-$script = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+$script = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+if ($script === '/' || $script === '.') $script = '';
 define('BASEURL', $protocol . $host . $script);
 
 define('DB_HOST', 'localhost');
