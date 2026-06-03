@@ -27,12 +27,30 @@
                 <a href="<?= BASEURL; ?>/pengelola/lapangan_form" class="btn-primary"><i class="fas fa-plus"></i> Tambah Lapangan</a>
             </header>
             <section class="table-container">
-                <div class="filter-bar compact">
-                    <input class="form-control" placeholder="Cari nama lapangan">
-                    <select class="form-control"><option>Semua Status</option><option>Tersedia</option><option>Maintenance</option><option>Nonaktif</option></select>
-                    <select class="form-control"><option>Semua Kategori</option><option>Futsal</option><option>Tennis</option><option>Badminton</option></select>
-                    <button class="btn-primary compact-button"><i class="fas fa-filter"></i> Filter</button>
-                </div>
+                <form method="GET" action="<?= BASEURL; ?>/pengelola/lapangan" id="filterForm">
+                    <div class="filter-bar compact">
+                        <input class="form-control" name="search" type="text" placeholder="Cari nama lapangan..." value="<?= isset($data['filter']['search']) ? htmlspecialchars($data['filter']['search']) : ''; ?>" onkeypress="if(event.keyCode == 13) this.form.submit()">
+                        <select class="form-control" name="status" onchange="this.form.submit()">
+                            <option <?= (isset($data['filter']['status']) && $data['filter']['status'] == 'Semua Status') || empty($data['filter']['status']) ? 'selected' : ''; ?>>Semua Status</option>
+                            <option <?= (isset($data['filter']['status']) && $data['filter']['status'] == 'Tersedia') ? 'selected' : ''; ?>>Tersedia</option>
+                            <option <?= (isset($data['filter']['status']) && $data['filter']['status'] == 'Maintenance') ? 'selected' : ''; ?>>Maintenance</option>
+                            <option <?= (isset($data['filter']['status']) && $data['filter']['status'] == 'Nonaktif') ? 'selected' : ''; ?>>Nonaktif</option>
+                        </select>
+                        <select class="form-control" name="sport" onchange="this.form.submit()">
+                            <option <?= (isset($data['filter']['sport']) && $data['filter']['sport'] == 'Semua Kategori') || empty($data['filter']['sport']) ? 'selected' : ''; ?>>Semua Kategori</option>
+                            <?php if (isset($data['kategori'])): ?>
+                                <?php foreach ($data['kategori'] as $k): ?>
+                                    <option <?= (isset($data['filter']['sport']) && $data['filter']['sport'] == $k['nama_kategori']) ? 'selected' : ''; ?>><?= htmlspecialchars($k['nama_kategori']); ?></option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option <?= (isset($data['filter']['sport']) && $data['filter']['sport'] == 'Futsal') ? 'selected' : ''; ?>>Futsal</option>
+                                <option <?= (isset($data['filter']['sport']) && $data['filter']['sport'] == 'Tennis') ? 'selected' : ''; ?>>Tennis</option>
+                                <option <?= (isset($data['filter']['sport']) && $data['filter']['sport'] == 'Badminton') ? 'selected' : ''; ?>>Badminton</option>
+                            <?php endif; ?>
+                        </select>
+                        <button type="submit" class="btn-primary compact-button"><i class="fas fa-filter"></i> Filter</button>
+                    </div>
+                </form>
                 <table class="data-table">
                     <thead><tr><th>Lapangan</th><th>Kategori</th><th>Harga</th><th>Total Booking</th><th>Status</th><th>Aksi</th></tr></thead>
                     <tbody>

@@ -36,7 +36,24 @@ class Pengelola extends Controller {
         $data['judul'] = 'Lapangan Saya';
         $id_pengelola = $_SESSION['user_id'];
         $lapanganModel = $this->model('Lapangan_model');
-        $data['lapangan'] = $lapanganModel->getLapanganByPengelola($id_pengelola);
+        
+        $keyword = $_GET['search'] ?? '';
+        $status = $_GET['status'] ?? '';
+        $kategori = $_GET['sport'] ?? '';
+
+        $data['kategori'] = $lapanganModel->getCategories();
+        
+        if (!empty($keyword) || (!empty($status) && $status !== 'Semua Status') || (!empty($kategori) && $kategori !== 'Semua Kategori')) {
+            $data['lapangan'] = $lapanganModel->searchLapanganPengelola($id_pengelola, $keyword, $status, $kategori);
+        } else {
+            $data['lapangan'] = $lapanganModel->getLapanganByPengelola($id_pengelola);
+        }
+        
+        $data['filter'] = [
+            'search' => $keyword,
+            'status' => $status,
+            'sport' => $kategori
+        ];
 
         $this->view('pengelola/pengelola-lapangan', $data);
     }
