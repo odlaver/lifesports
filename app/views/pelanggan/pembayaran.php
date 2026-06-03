@@ -58,20 +58,16 @@
                             <label class="form-label" style="display: block; margin-bottom: 10px;">Metode Transfer</label>
                             
                             <label class="payment-method active" style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; margin-bottom: 10px;">
-                                <input type="radio" name="metode_pembayaran" value="Transfer Bank BCA" checked style="margin-right: 5px;">
-                                <i class="fas fa-building-columns" style="font-size: 1.5rem; color: var(--text-gold);"></i>
-                                <div>
-                                    <strong style="display: block; color: #fff;">Transfer Bank BCA</strong>
-                                    <span style="font-size: 0.8rem; color: var(--text-muted);">No. Rek: 8810 2026 0511 (A.N. Lifesports Premium)</span>
-                                </div>
-                            </label>
-                            
-                            <label class="payment-method" style="display: flex; align-items: center; gap: 15px; padding: 15px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; margin-bottom: 10px;">
-                                <input type="radio" name="metode_pembayaran" value="E-Wallet DANA/OVO" style="margin-right: 5px;">
+                                <input type="radio" name="metode_pembayaran" value="Dompet Digital" checked style="margin-right: 5px;">
                                 <i class="fas fa-wallet" style="font-size: 1.5rem; color: var(--text-gold);"></i>
                                 <div>
-                                    <strong style="display: block; color: #fff;">Dompet Digital (DANA/OVO)</strong>
-                                    <span style="font-size: 0.8rem; color: var(--text-muted);">No. HP: 0812-3456-7890 (A.N. Lifesports Premium)</span>
+                                    <strong style="display: block; color: #fff;">Dompet Digital</strong>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">
+                                        <?php 
+                                        $info = !empty($data['booking']['info_pembayaran']) ? $data['booking']['info_pembayaran'] : 'Belum diset oleh pengelola';
+                                        echo htmlspecialchars($info); 
+                                        ?>
+                                    </span>
                                 </div>
                             </label>
                         </div>

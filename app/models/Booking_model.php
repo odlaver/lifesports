@@ -6,6 +6,18 @@ class Booking_model {
     public function __construct()
     {
         $this->db = new Database();
+        $this->autoUpdateStatuses();
+    }
+
+    private function autoUpdateStatuses()
+    {
+        // Cancel pending bookings older than 2 hours
+        $this->db->query("UPDATE booking SET status = 'dibatalkan' WHERE status = 'pending' AND created_at <= DATE_SUB(NOW(), INTERVAL 2 HOUR)");
+        $this->db->execute();
+
+        // Auto-complete confirmed bookings that have passed their game time
+        $this->db->query("UPDATE booking SET status = 'selesai' WHERE status = 'dikonfirmasi' AND CONCAT(tanggal_main, ' ', jam_selesai) <= NOW()");
+        $this->db->execute();
     }
 
     public function countBookingByPelanggan($id_pelanggan)
@@ -79,17 +91,19 @@ class Booking_model {
     public function getBookingById($id, $id_pelanggan = null)
     {
         if ($id_pelanggan !== null) {
-            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori 
+            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori, u.info_pembayaran 
                         FROM booking b 
                         JOIN lapangan l ON b.id_lapangan = l.id 
                         JOIN kategori_lapangan k ON l.id_kategori = k.id 
+                        JOIN users u ON l.id_pengelola = u.id
                         WHERE b.id = :id AND b.id_pelanggan = :id_pelanggan");
             $this->db->bind(':id_pelanggan', $id_pelanggan);
         } else {
-            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori 
+            $this->db->query("SELECT b.*, l.nama_lapangan, l.foto_utama, k.nama_kategori, u.info_pembayaran 
                         FROM booking b 
                         JOIN lapangan l ON b.id_lapangan = l.id 
                         JOIN kategori_lapangan k ON l.id_kategori = k.id 
+                        JOIN users u ON l.id_pengelola = u.id
                         WHERE b.id = :id");
         }
         $this->db->bind(':id', $id);
@@ -106,6 +120,23 @@ class Booking_model {
         $this->db->bind(':id', $id);
         $this->db->bind(':id_pelanggan', $id_pelanggan);
         return $this->db->single();
+    }
+
+    public function checkAvailability($id_lapangan, $tanggal_main, $jam_mulai, $jam_selesai)
+    {
+        // Check if there is any overlapping booking (pending, dibayar, dikonfirmasi, selesai)
+        $this->db->query("SELECT COUNT(*) as total FROM booking 
+                          WHERE id_lapangan = :id_lapangan 
+                          AND tanggal_main = :tanggal_main 
+                          AND status IN ('pending', 'dibayar', 'dikonfirmasi', 'selesai')
+                          AND (
+                              (jam_mulai < :jam_selesai AND jam_selesai > :jam_mulai)
+                          )");
+        $this->db->bind(':id_lapangan', $id_lapangan);
+        $this->db->bind(':tanggal_main', $tanggal_main);
+        $this->db->bind(':jam_mulai', $jam_mulai);
+        $this->db->bind(':jam_selesai', $jam_selesai);
+        return $this->db->single()['total'] > 0;
     }
 
     public function insertBooking($kode_booking, $id_pelanggan, $id_lapangan, $tanggal_main, $jam_mulai, $jam_selesai, $total_harga)
@@ -279,6 +310,33 @@ class Booking_model {
                     JOIN users u2 ON l.id_pengelola = u2.id
                     JOIN kategori_lapangan k ON l.id_kategori = k.id
                     ORDER BY b.created_at DESC");
+        return $this->db->resultSet();
+    }
+
+    public function getTopLapanganAdmin()
+    {
+        $this->db->query("SELECT l.nama_lapangan, k.nama_kategori, u.nama as nama_pengelola, COUNT(b.id) as total_booking, SUM(b.total_harga) as pendapatan
+                    FROM booking b
+                    JOIN lapangan l ON b.id_lapangan = l.id
+                    JOIN kategori_lapangan k ON l.id_kategori = k.id
+                    JOIN users u ON l.id_pengelola = u.id
+                    WHERE b.status = 'selesai'
+                    GROUP BY l.id
+                    ORDER BY pendapatan DESC
+                    LIMIT 5");
+        return $this->db->resultSet();
+    }
+
+    public function getTopPengelolaAdmin()
+    {
+        $this->db->query("SELECT u.nama as nama_pengelola, COUNT(DISTINCT l.id) as jumlah_lapangan, COUNT(b.id) as total_booking, SUM(b.total_harga) as pendapatan
+                    FROM booking b
+                    JOIN lapangan l ON b.id_lapangan = l.id
+                    JOIN users u ON l.id_pengelola = u.id
+                    WHERE b.status = 'selesai'
+                    GROUP BY u.id
+                    ORDER BY pendapatan DESC
+                    LIMIT 5");
         return $this->db->resultSet();
     }
 }
