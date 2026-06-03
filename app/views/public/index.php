@@ -66,50 +66,64 @@
             <div class="booking-widget">
                 <div class="widget-header">
                     <i class="fas fa-calendar-alt"></i>
-                    <span>APRIL 2026</span>
+                    <?php
+                    $months = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+                    $currentMonth = $months[date('n') - 1];
+                    $currentYear = date('Y');
+                    ?>
+                    <span><?= $currentMonth . ' ' . $currentYear ?></span>
                     <div class="widget-arrows">
                         <i class="fas fa-chevron-left"></i>
                         <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
                 <div class="widget-days">
-                    <div class="day-col"><span>SEN</span><strong>27</strong></div>
-                    <div class="day-col"><span>SEL</span><strong>28</strong></div>
-                    <div class="day-col active"><span>RAB</span><strong>29</strong></div>
-                    <div class="day-col"><span>KAM</span><strong>30</strong></div>
-                    <div class="day-col"><span>JUM</span><strong>1</strong></div>
+                    <?php
+                    $days = ["MIN", "SEN", "SEL", "RAB", "KAM", "JUM", "SAB"];
+                    for ($i = 0; $i < 5; $i++) {
+                        $timestamp = strtotime("+$i days");
+                        $dayName = $days[date('w', $timestamp)];
+                        $dateNum = date('j', $timestamp);
+                        $activeClass = $i == 0 ? ' active' : '';
+                        echo "<div class=\"day-col{$activeClass}\"><span>{$dayName}</span><strong>{$dateNum}</strong></div>";
+                    }
+                    ?>
                 </div>
                 <div class="widget-body">
-                    <div class="court-col">
-                        <div class="court-title">LAP. 1 (INDOOR)</div>
-                        <div class="time-slot available">
-                            <span class="time">08:00</span>
-                            <span class="status">TERSEDIA</span>
-                        </div>
-                        <div class="time-slot selected">
-                            <span class="time">09:00</span>
-                            <span class="status">DIPILIH</span>
-                        </div>
-                        <div class="time-slot available">
-                            <span class="time">10:00</span>
-                            <span class="status">TERSEDIA</span>
-                        </div>
-                    </div>
-                    <div class="court-col">
-                        <div class="court-title">LAP. 2 (OUTDOOR)</div>
-                        <div class="time-slot booked">
-                            <span class="time">08:00</span>
-                            <span class="status">BOOKED</span>
-                        </div>
-                        <div class="time-slot booked">
-                            <span class="time">09:00</span>
-                            <span class="status">BOOKED</span>
-                        </div>
-                        <div class="time-slot available">
-                            <span class="time">10:00</span>
-                            <span class="status">TERSEDIA</span>
-                        </div>
-                    </div>
+                    <?php
+                    $widgetCourts = array_slice($data['rekomen'] ?? [], 0, 2);
+                    // Fallback in case no courts are returned
+                    if (empty($widgetCourts)) {
+                        $widgetCourts = [
+                            ['nama_lapangan' => 'LAP. 1 (INDOOR)'],
+                            ['nama_lapangan' => 'LAP. 2 (OUTDOOR)']
+                        ];
+                    }
+                    $statuses = ['available' => 'TERSEDIA', 'booked' => 'BOOKED', 'selected' => 'DIPILIH'];
+                    foreach ($widgetCourts as $index => $court) {
+                        $slots = ['08:00', '09:00', '10:00'];
+                        echo '<div class="court-col">';
+                        $courtName = is_array($court) ? $court['nama_lapangan'] : $court->nama_lapangan;
+                        $shortName = strlen($courtName) > 15 ? substr($courtName, 0, 15) . '...' : $courtName;
+                        echo '<div class="court-title">' . strtoupper($shortName) . '</div>';
+                        
+                        foreach ($slots as $slotIdx => $time) {
+                            if ($index == 0 && $slotIdx == 1) {
+                                $class = 'selected';
+                            } elseif ($index == 1 && $slotIdx < 2) {
+                                $class = 'booked';
+                            } else {
+                                $class = 'available';
+                            }
+                            $label = $statuses[$class];
+                            echo '<div class="time-slot ' . $class . '">';
+                            echo '<span class="time">' . $time . '</span>';
+                            echo '<span class="status">' . $label . '</span>';
+                            echo '</div>';
+                        }
+                        echo '</div>';
+                    }
+                    ?>
                 </div>
                 <div class="widget-footer">
                     <div class="price-info">
@@ -134,17 +148,17 @@
         <div class="container stats-grid">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-building"></i></div>
-                <div class="stat-number">124</div>
+                <div class="stat-number"><?= number_format($data['total_lapangan'] ?? 0, 0, ',', '.') ?></div>
                 <div class="stat-label">Lapangan Tersedia</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-number">5,430</div>
-                <div class="stat-label">Pelanggan Aktif</div>
+                <div class="stat-number"><?= number_format($data['total_pelanggan'] ?? 0, 0, ',', '.') ?></div>
+                <div class="stat-label">Pengguna Terdaftar</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-                <div class="stat-number">12k+</div>
+                <div class="stat-number"><?= number_format($data['total_booking'] ?? 0, 0, ',', '.') ?></div>
                 <div class="stat-label">Total Booking</div>
             </div>
         </div>
@@ -157,62 +171,32 @@
         </div>
 
         <div class="card-grid">
-
-            <div class="card">
-                <div class="card-badge"><i class="fas fa-star"></i> 4.9</div>
-                <img src="<?= BASEURL; ?>/public/assets/img/bola.png" alt="Futsal Field" class="card-img">
-                <div class="card-content">
-                    <div class="card-category">FUTSAL</div>
-                    <h3 class="card-title">Kedaton Futsal Arena</h3>
-                    <div class="card-info">
-                        <div><i class="fas fa-map-marker-alt"></i> Kedaton, Bandar Lampung</div>
-                        <div><i class="fas fa-user-tie"></i> Kemenpora Lampung</div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-price">Rp 150.000<span class="price-unit">/jam</span>
+            <?php if (!empty($data['rekomen'])): ?>
+                <?php foreach ($data['rekomen'] as $lap): ?>
+                    <div class="card">
+                        <div class="card-badge"><i class="fas fa-star"></i> <?= number_format($lap['rating'], 1) ?></div>
+                        <img src="<?= BASEURL; ?>/public/assets/uploads/lapangan/<?= htmlspecialchars($lap['foto_utama']) ?>" 
+                             alt="<?= htmlspecialchars($lap['nama_lapangan']) ?>" 
+                             class="card-img"
+                             onerror="this.src='<?= BASEURL; ?>/public/assets/img/bola.png'">
+                        <div class="card-content">
+                            <div class="card-category"><?= strtoupper(htmlspecialchars($lap['nama_kategori'])) ?></div>
+                            <h3 class="card-title"><?= htmlspecialchars($lap['nama_lapangan']) ?></h3>
+                            <div class="card-info">
+                                <div><i class="fas fa-map-marker-alt"></i> Bandar Lampung</div>
+                                <div><i class="fas fa-user-tie"></i> Mitra Lifesports</div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="card-price">Rp <?= number_format($lap['harga_per_jam'], 0, ',', '.') ?><span class="price-unit">/jam</span>
+                                </div>
+                                <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
+                            </div>
                         </div>
-                        <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
                     </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-badge"><i class="fas fa-star"></i> 4.8</div>
-                <img src="<?= BASEURL; ?>/public/assets/img/tenis.jpg"
-                    alt="Tennis Field" class="card-img">
-                <div class="card-content">
-                    <div class="card-category">TENNIS</div>
-                    <h3 class="card-title">Sukarame Sport Center</h3>
-                    <div class="card-info">
-                        <div><i class="fas fa-map-marker-alt"></i> Sukarame, Bandar Lampung</div>
-                        <div><i class="fas fa-user-tie"></i> PT. Sukarame Jaya</div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-price">Rp 100.000<span class="price-unit">/jam</span>
-                        </div>
-                        <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-badge"><i class="fas fa-star"></i> 4.9</div>
-                <img src="<?= BASEURL; ?>/public/assets/img/badminton.jpg"
-                    alt="Badminton Field" class="card-img">
-                <div class="card-content">
-                    <div class="card-category">BADMINTON</div>
-                    <h3 class="card-title">Way Halim Badminton Arena</h3>
-                    <div class="card-info">
-                        <div><i class="fas fa-map-marker-alt"></i> Way Halim, Bandar Lampung</div>
-                        <div><i class="fas fa-user-tie"></i> WHM Management</div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-price">Rp 80.000<span class="price-unit">/jam</span>
-                        </div>
-                        <a href="<?= BASEURL; ?>/home/lapangan" class="btn-secondary compact-button">Detail</a>
-                    </div>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Belum ada data lapangan populer.</p>
+            <?php endif; ?>
         </div>
 
         <div class="center-cta">

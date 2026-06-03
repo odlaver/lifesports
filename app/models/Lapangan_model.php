@@ -20,6 +20,50 @@ class Lapangan_model {
         return $this->db->resultSet();
     }
 
+    public function searchLapangan($keyword = '', $kategori = '', $lokasi = '', $sort = '')
+    {
+        $query = "SELECT l.*, k.nama_kategori, COALESCE(AVG(r.rating), 5.0) as rating, COUNT(b.id) as total_booking
+                  FROM lapangan l
+                  JOIN kategori_lapangan k ON l.id_kategori = k.id
+                  LEFT JOIN booking b ON b.id_lapangan = l.id
+                  LEFT JOIN review r ON r.id_booking = b.id
+                  WHERE l.status = 'aktif'";
+                  
+        if (!empty($keyword)) {
+            $query .= " AND l.nama_lapangan LIKE :keyword";
+        }
+        if (!empty($kategori) && $kategori !== 'Semua Cabang') {
+            $query .= " AND k.nama_kategori = :kategori";
+        }
+        if (!empty($lokasi) && $lokasi !== 'Semua Lokasi') {
+            $query .= " AND (l.nama_lapangan LIKE :lokasi OR l.deskripsi LIKE :lokasi)";
+        }
+        
+        $query .= " GROUP BY l.id, l.id_pengelola, l.id_kategori, l.nama_lapangan, l.deskripsi, l.harga_per_jam, l.fasilitas, l.foto_utama, l.status, l.created_at, k.nama_kategori";
+        
+        if ($sort === 'Harga Terendah') {
+            $query .= " ORDER BY l.harga_per_jam ASC";
+        } elseif ($sort === 'Rating Tertinggi') {
+            $query .= " ORDER BY rating DESC, total_booking DESC";
+        } else {
+            $query .= " ORDER BY total_booking DESC, rating DESC";
+        }
+
+        $this->db->query($query);
+
+        if (!empty($keyword)) {
+            $this->db->bind(':keyword', '%' . $keyword . '%');
+        }
+        if (!empty($kategori) && $kategori !== 'Semua Cabang') {
+            $this->db->bind(':kategori', $kategori);
+        }
+        if (!empty($lokasi) && $lokasi !== 'Semua Lokasi') {
+            $this->db->bind(':lokasi', '%' . $lokasi . '%');
+        }
+
+        return $this->db->resultSet();
+    }
+
     public function getLapanganById($id)
     {
         $this->db->query("SELECT l.*, k.nama_kategori 
@@ -117,7 +161,7 @@ class Lapangan_model {
                     LEFT JOIN review r ON r.id_booking = b.id
                     WHERE l.status = 'aktif'
                     GROUP BY l.id, l.id_pengelola, l.id_kategori, l.nama_lapangan, l.deskripsi, l.harga_per_jam, l.fasilitas, l.foto_utama, l.status, l.created_at, k.nama_kategori
-                    ORDER BY rating DESC
+                    ORDER BY rating DESC, COUNT(b.id) DESC
                     LIMIT 3");
         return $this->db->resultSet();
     }
