@@ -34,8 +34,22 @@ class Pelanggan extends Controller {
         $data['judul'] = 'Daftar Lapangan';
         $lapanganModel = $this->model('Lapangan_model');
 
+        $keyword = $_GET['search'] ?? '';
+        $kategori = $_GET['sport'] ?? '';
+        $lokasi = $_GET['location'] ?? '';
+        $sort = $_GET['sort'] ?? '';
+        $date = $_GET['date'] ?? '';
+
+        $data['lapangan'] = $lapanganModel->searchLapangan($keyword, $kategori, $lokasi, $sort);
         $data['kategori'] = $lapanganModel->getCategories();
-        $data['lapangan'] = $lapanganModel->getAllActiveLapangan();
+        
+        $data['filter'] = [
+            'search' => $keyword,
+            'sport' => $kategori,
+            'location' => $lokasi,
+            'sort' => $sort,
+            'date' => $date
+        ];
 
         $this->view('pelanggan/pelanggan-lapangan', $data);
     }

@@ -45,37 +45,38 @@
 
             <section class="table-container catalog-dashboard">
 
-                <div class="filter-bar compact" id="filter-lapangan-top">
-                    <input class="form-control" id="search-lapangan" type="text" placeholder="Cari nama lapangan...">
-                    <select class="form-control" id="filter-cabang">
-                        <option>Semua Cabang</option>
-                        <option>Futsal</option>
-                        <option>Tennis</option>
-                        <option>Badminton</option>
-                        <option>Basket</option>
-                    </select>
-                    <select class="form-control" id="filter-lokasi">
-                        <option>Semua Lokasi</option>
-                        <option>Kedaton</option>
-                        <option>Sukarame</option>
-                        <option>Way Halim</option>
-                        <option>Kemiling</option>
-                        <option>Tanjung Karang</option>
-                    </select>
-                    <input class="form-control" id="filter-tanggal" type="date">
-                    <select class="form-control" id="filter-sort">
-                        <option>Urutkan: Populer</option>
-                        <option>Harga Terendah</option>
-                        <option>Rating Tertinggi</option>
-                    </select>
-                    <button class="btn-primary compact-button" id="btn-terapkan-filter">
-                        <i class="fas fa-filter"></i> Terapkan
-                    </button>
-                </div>
+                <form method="GET" action="<?= BASEURL; ?>/pelanggan/lapangan" id="filterForm">
+                    <div class="filter-bar compact" id="filter-lapangan-top">
+                        <input class="form-control" name="search" id="search-lapangan" type="text" placeholder="Cari nama lapangan..." value="<?= htmlspecialchars($data['filter']['search']); ?>" onkeypress="if(event.keyCode == 13) this.form.submit()">
+                        <select class="form-control" name="sport" id="filter-cabang" onchange="this.form.submit()">
+                            <option <?= $data['filter']['sport'] == 'Semua Cabang' || empty($data['filter']['sport']) ? 'selected' : ''; ?>>Semua Cabang</option>
+                            <?php foreach ($data['kategori'] as $k): ?>
+                                <option <?= $data['filter']['sport'] == $k['nama_kategori'] ? 'selected' : ''; ?>><?= htmlspecialchars($k['nama_kategori']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select class="form-control" name="location" id="filter-lokasi" onchange="this.form.submit()">
+                            <option <?= $data['filter']['location'] == 'Semua Lokasi' || empty($data['filter']['location']) ? 'selected' : ''; ?>>Semua Lokasi</option>
+                            <option <?= $data['filter']['location'] == 'Kedaton' ? 'selected' : ''; ?>>Kedaton</option>
+                            <option <?= $data['filter']['location'] == 'Sukarame' ? 'selected' : ''; ?>>Sukarame</option>
+                            <option <?= $data['filter']['location'] == 'Way Halim' ? 'selected' : ''; ?>>Way Halim</option>
+                            <option <?= $data['filter']['location'] == 'Kemiling' ? 'selected' : ''; ?>>Kemiling</option>
+                            <option <?= $data['filter']['location'] == 'Tanjung Karang' ? 'selected' : ''; ?>>Tanjung Karang</option>
+                        </select>
+                        <input class="form-control" name="date" id="filter-tanggal" type="date" value="<?= htmlspecialchars($data['filter']['date']); ?>" onchange="this.form.submit()">
+                        <select class="form-control" name="sort" id="filter-sort" onchange="this.form.submit()">
+                            <option <?= $data['filter']['sort'] == 'Populer' || empty($data['filter']['sort']) ? 'selected' : ''; ?>>Urutkan: Populer</option>
+                            <option <?= $data['filter']['sort'] == 'Harga Terendah' ? 'selected' : ''; ?>>Harga Terendah</option>
+                            <option <?= $data['filter']['sort'] == 'Rating Tertinggi' ? 'selected' : ''; ?>>Rating Tertinggi</option>
+                        </select>
+                        <button type="submit" class="btn-primary compact-button" id="btn-terapkan-filter">
+                            <i class="fas fa-filter"></i> Terapkan
+                        </button>
+                    </div>
+                </form>
 
                 <div class="table-header" id="hasil-lapangan">
                     <div>
-                        <span class="text-muted">8 LAPANGAN TERSEDIA</span>
+                        <span class="text-muted"><?= count($data['lapangan']); ?> LAPANGAN TERSEDIA</span>
                         <strong class="block-label">Rekomendasi hari ini</strong>
                     </div>
                 </div>
