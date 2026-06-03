@@ -135,7 +135,7 @@ class Pengelola extends Controller {
         try {
             $lapangan = $lapanganModel->getLapanganById($id);
             if ($lapangan && $lapangan['id_pengelola'] == $id_pengelola) {
-                // Check if lapangan has any bookings
+
                 $bookingModel = $this->model('Booking_model');
                 $this->db = new Database();
                 $this->db->query("SELECT COUNT(*) as total FROM booking WHERE id_lapangan = :id_lapangan");

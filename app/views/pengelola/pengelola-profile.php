@@ -38,7 +38,7 @@
                             <label class="form-label">Nama</label>
                             <input class="form-control" name="nama" value="<?= isset($data['user']['nama']) ? htmlspecialchars($data['user']['nama']) : ''; ?>" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="form-label">Email</label>
                             <input class="form-control" type="email" name="email" value="<?= isset($data['user']['email']) ? htmlspecialchars($data['user']['email']) : ''; ?>" required>
@@ -55,7 +55,7 @@
                             <input class="form-control" type="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
                         </div>
                     </div>
-                    
+
                     <button class="btn-primary" type="submit"><i class="fas fa-save"></i> Simpan Perubahan</button>
                 </form>
             </section>
