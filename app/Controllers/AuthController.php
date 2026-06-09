@@ -9,7 +9,8 @@ use App\Model\User;
 class AuthController extends Controller {
     public function showLogin() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect($_SESSION['role']);
+            $redirect = $_SESSION['role'] === 'pelanggan' ? 'pelanggan/lapangan' : $_SESSION['role'];
+            $this->redirect($redirect);
             return;
         }
         $data = ['judul' => 'Login'];
@@ -18,7 +19,8 @@ class AuthController extends Controller {
 
     public function showRegister() {
         if (isset($_SESSION['user_id'])) {
-            $this->redirect($_SESSION['role']);
+            $redirect = $_SESSION['role'] === 'pelanggan' ? 'pelanggan/lapangan' : $_SESSION['role'];
+            $this->redirect($redirect);
             return;
         }
         $data = ['judul' => 'Register'];
@@ -49,7 +51,8 @@ class AuthController extends Controller {
             $_SESSION['email']   = $user['email'];
             $_SESSION['role']    = $user['role'];
 
-            $this->redirect($user['role']);
+            $redirect = $user['role'] === 'pelanggan' ? 'pelanggan/lapangan' : $user['role'];
+            $this->redirect($redirect);
         } else {
             Flasher::setFlash('Email atau password salah!', 'danger');
             $this->redirect('auth/login');
